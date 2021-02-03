@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+    schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+    <logicalReaders>
+        <logicalReader>testReader</logicalReader>
+    </logicalReaders>
+    <boundarySpec>
+        <duration unit="MS">5000</duration>
+    </boundarySpec>
+    <reportSpecs>
+        <reportSpec reportName="default">
+            <reportSet set="CURRENT" />
+            <output includeEPC="true" includeCount="true">
+                <extension>
+                    <fieldList>
+                        <field>
+                            <fieldspec>
+                                <fieldname>tidBank</fieldname>
+                            </fieldspec>
+                        </field>
+                        <field>
+                            <fieldspec>
+                                <fieldname>userBank</fieldname>
+                            </fieldspec>
+                        </field>
+                    </fieldList>
+                </extension>
+            </output>
+            <extension>
+              <statProfileNames>
+                <statProfileName>TagTimestamps</statProfileName>
+              </statProfileNames>
+            </extension>
+        </reportSpec>
+    </reportSpecs>
+    <extension>
+        <primaryKeyFields>
+            <primaryKeyField>tidBank</primaryKeyField>
+        </primaryKeyFields>
+    </extension>
+</ale:ECSpec>

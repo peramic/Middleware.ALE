@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ale:ECReports specName="" date="0001-01-01T00:00:00" ALEID="Ha-VIS Middleware" totalMilliseconds="3000" initiationCondition="REQUESTED" terminationCondition="DURATION" xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<reports>
+		<report reportName="default">
+			<group>
+				<groupList>
+					<member>
+						<tag>urn:epc:raw:96.x445566778899AABBCCDDEEFF</tag>
+						<extension>
+							<fieldList>
+								<field>
+									<name>epc</name>
+									<value>urn:epc:raw:96.x445566778899AABBCCDDEEFF</value>
+								</field>
+							</fieldList>
+						</extension>
+					</member>
+				</groupList>
+				<groupCount>
+					<count>1</count>
+				</groupCount>
+			</group>
+		</report>
+	</reports>
+</ale:ECReports>

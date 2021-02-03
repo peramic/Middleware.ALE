@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:LRSpec xmlns:ale="urn:epcglobal:ale:xsd:1" schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+  <properties>
+    <property>
+      <name>ReaderType</name>
+      <value>RF-R500</value>
+    </property>
+    <property>
+      <name>Connector.ConnectionType</name>
+      <value>TCP</value>
+    </property>
+    <property>
+      <name>Connector.TagsInField</name>
+      <value>128</value>
+    </property>
+    <property>
+      <name>Connector.Host</name>
+      <value>10.65.54.122</value>
+    </property>
+    <property>
+      <name>Connector.Port</name>
+      <value>10001</value>
+    </property>
+    <property>
+      <name>Connector.InventoryAttempts</name>
+      <value>3</value>
+    </property>
+    <property>
+      <name>Reader.Transponder.PersistenceReset.Antenna.No1.PersistenceResetTime</name>
+      <value>0</value>
+    </property>
+    <property>
+      <name>Connector.Inventory.Antennas</name>
+      <value>1</value>
+    </property>
+  </properties>
+</ale:LRSpec>

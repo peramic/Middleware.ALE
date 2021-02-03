@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:CCSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>001</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">5000</repeatPeriod>
+		<duration unit="MS">5000</duration>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec name="spec01" reportIfEmpty="true">
+			<opSpecs>
+				<opSpec>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>epc</fieldname>
+						<datatype>epc</datatype>
+						<format>epc-tag</format>
+					</fieldspec>
+					<dataSpec>
+						<specType>LITERAL</specType>
+						<data>urn:epc:tag:sgtin-96:1.426025746.1122</data>
+					</dataSpec>
+					<opName>write</opName>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ale:CCSpec>

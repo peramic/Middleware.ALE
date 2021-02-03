@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<project name="havis.middleware.ale-impl" default="publish" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property file="${basedir}/build.properties" />
+	<property name="basename" value="${ant.project.name}" />
+	<property name="build.dir" location="${basedir}/target" />
+	<property name="build.dir.classes" location="${basedir}/target/classes" />
+	<property name="build.dir.test" location="${build.dir}/test" />
+	<property name="build.dir.test.classes" location="${build.dir.test}/classes" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="src.main.dir" location="${basedir}/src/main/java" />
+	<property name="src.test.dir" location="${basedir}/src/test/java" />
+	<property name="doc.dir" location="${build.dir}/doc" />
+	<property name="resources.dir" location="${basedir}/src/main/resources" />
+
+	<property name="test.resources.dir" location="${basedir}/src/test/resources" />
+
+	<property file="${resources.dir}/build.properties" />
+	<property file="${resources.dir}/MANIFEST.MF" prefix="manifest" />
+
+	<filterset id="manifest" filtersfile="${resources.dir}/MANIFEST.MF" />
+
+	<property name="javac.version" value="8" />
+
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}" />
+	</path>
+
+	<filterset id="manifest" filtersfile="${resources.dir}/MANIFEST.MF"/>
+
+	<!-- Checks if the build.properties file exists and sets the state to the property
+            "build.properties.exists" -->
+	<target name="check.build.properties">
+		<condition property="ivy.resolver" else="local">
+			<isset property="ivy.resolver" />
+		</condition>
+		<fail message="Missing property 'api.url'. Does 'build.properties' file exists?" unless="api.url" />
+		<fail message="Missing property 'ivy.url'. Does 'build.properties' file exists?" unless="ivy.url" />
+	</target>
+
+	<target name="clean-cache" description="Cleans ivy cache">
+		<ivy:cleancache />
+	</target>
+
+	<target name="clean" description="Cleans the project">
+		<delete dir="${build.dir}" />
+		<delete dir="${lib.dir}" />
+	</target>
+
+	<target name="clean-all" depends="clean, clean-cache" description="Cleans the project and ivy cache" />
+
+	<target name="retrieve" depends="check.build.properties" description="">
+		<ivy:retrieve />
+	</target>
+
+	<!-- Compiles the java source code using javac -->
+	<target name="compile" depends="retrieve" description="Compile">
+		<mkdir dir="${build.dir.classes}" />
+		<javac srcdir="${src.main.dir}" destdir="${build.dir.classes}" release="${javac.version}" debug="${javac.debug}" includeantruntime="false">
+			<classpath>
+				<!-- external libraries -->
+				<path refid="build.classpath" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="prepare" depends="compile" unless="${skip.test}">
+		<mkdir dir="${build.dir.test.classes}" />
+
+		<javac srcdir="${src.test.dir}" destdir="${build.dir.test.classes}" release="${javac.version}" debug="${javac.debug}" includeantruntime="false">
+			<classpath>
+				<path refid="build.classpath" />
+				<pathelement location="${build.dir.classes}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="test" depends="prepare" unless="${skip.test}">
+		<java classname="havis.middleware.ale.TestRunner" fork="true" failonerror="true" timeout="180000">
+			<jvmarg value="-Djmockit-coverage-output=html" />
+			<jvmarg value="-Djmockit-coverage-outputDir=${build.dir.test}/coverage-report" />
+			<jvmarg value="-Djmockit-coverage-srcDirs=${src.main.dir}" />
+			<classpath>
+				<path refid="build.classpath" />
+				<pathelement location="${build.dir.classes}" />
+				<pathelement location="${resources.dir}/classpath" />
+				<pathelement location="${build.dir.test.classes}" />
+				<pathelement location="${test.resources.dir}/classpath" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="jar" depends="compile">
+		<copy todir="${build.dir.classes}">
+			<fileset dir="${resources.dir}/classpath" includes="OSGI-INF/${basename}.properties" />
+			<filterset refid="manifest" />
+		</copy>
+		<jar jarfile="${build.dir}/${basename}.jar" manifest="${resources.dir}/MANIFEST.MF">
+			<fileset dir="${build.dir.classes}" />
+			<fileset dir="${resources.dir}/classpath" excludes="OSGI-INF/${basename}.properties" />
+		</jar>
+	</target>
+
+	<target name="jar-doc" description="Creates a javadoc JAR of the implemented and generated classes">
+		<!-- create javadoc JAR -->
+		<javadoc destdir="${doc.dir}" author="true" version="true" use="true" windowtitle="${javadoc.windowtitle}" doctitle="${javadoc.doctitle}" bottom="${javadoc.buttom}">
+			<packageset dir="${src.main.dir}" />
+			<classpath>
+				<pathelement location="${src.main.dir}" />
+				<path refid="build.classpath" />
+			</classpath>
+			<group title="Packages" packages="havis.devive.io.*" />
+			<link offline="true" href="http://docs.oracle.com/javase/7/docs/api/" packagelistURL="${api.url}/javase/7/" />
+		</javadoc>
+		<jar jarfile="${build.dir}/${basename}-javadoc.jar" update="true" basedir="${doc.dir}" />
+	</target>
+
+	<target name="jar-src" depends="compile" description="Creates the source JAR">
+		<!-- create source JAR -->
+		<jar jarfile="${build.dir}/${basename}-sources.jar" update="true" basedir="${src.main.dir}">
+			<fileset dir="${src.main.dir}" />
+		</jar>
+	</target>
+
+	<target name="generate-doc">
+		<exec executable="sh" dir="${resources.dir}/doc">
+			<arg value="${resources.dir}/doc/createpdf.sh" />
+		</exec>
+	</target>
+
+	<target name="deb" depends="jar">
+		<copy file="${build.dir}/${basename}.jar" tofile="${build.dir}/deb/opt/havis-apps/bundle/60_${basename}.jar" />
+
+		<copy todir="${build.dir}/deb">
+			<fileset dir="${resources.dir}/deb/" includes="**/*.html DEBIAN/*" />
+			<filterset refid="manifest" />
+			<filterset>
+				<filter token="PACKAGE" value="${basename}" />
+				<filter token="ARCH" value="all" />
+				<filter token="PLATFORM" value="${platform}" />
+			</filterset>
+		</copy>
+
+		<copy todir="${build.dir}/deb">
+			<fileset dir="${resources.dir}/deb/" excludes="**/*.html DEBIAN/*" />
+		</copy>
+
+		<mkdir dir="${build.dir}/deb/usr/share/doc" />
+
+		<chmod perm="755" type="file">
+			<fileset dir="${build.dir}/deb/DEBIAN">
+				<include name="preinst" />
+				<include name="postinst" />
+				<include name="prerm" />
+				<include name="postrm"/>
+			</fileset>
+		</chmod>
+
+		<exec executable="fakeroot">
+			<arg value="dpkg" />
+			<arg value="-b" />
+			<arg value="${build.dir}/deb" />
+			<arg value="${build.dir}/${basename}.deb" />
+		</exec>
+	</target>
+
+	<target name="publish" depends="deb, jar-doc, jar-src" description="Publishes the JAR file to the local Ivy repository.">
+		<ivy:resolve file="${resources.dir}/ivy.xml" />
+
+		<ivy:publish resolver="${ivy.resolver}" pubrevision="${manifest.Bundle-Version}" status="integration" overwrite="true">
+			<artifacts pattern="${build.dir}/[artifact].[ext]" />
+		</ivy:publish>
+	</target>
+
+</project>

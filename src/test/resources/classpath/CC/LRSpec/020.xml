@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:LRSpec xmlns:ale="urn:epcglobal:ale:xsd:1" schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+  <properties>
+    <property>
+      <name>ReaderType</name>
+      <value>Test</value>
+    </property>
+    <property>
+      <name>Connector.Filename</name>
+      <value>/home/abrams/workspace/Middleware/ALE/src/test/resources/classpath/CC/data.xml</value>
+    </property>
+  </properties>
+</ale:LRSpec>

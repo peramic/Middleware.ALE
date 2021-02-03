@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TMFixedFieldListSpec>
+  <fixedFields>
+    <fixedField>
+      <fieldname>001</fieldname>
+      <bank>1</bank>
+      <length>32</length>
+      <defaultDatatype>uint</defaultDatatype>
+      <defaultFormat>hex</defaultFormat>
+    </fixedField>
+  </fixedFields>
+</TMFixedFieldListSpec>

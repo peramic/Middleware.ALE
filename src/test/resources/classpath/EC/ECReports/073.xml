@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ale:ECReports specName="" date="0001-01-01T00:00:00"
+	ALEID="Ha-VIS Middleware" totalMilliseconds="3000" initiationCondition="REQUESTED"
+	terminationCondition="DURATION" xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<reports>
+		<report reportName="default">
+			<group>
+				<groupList>
+					<member>
+						<tag>urn:epc:raw:96.x445566778899AABBCCDDEEFF</tag>
+						<extension>
+							<fieldList>
+								<field>
+									<name>epc</name>
+									<value>urn:epc:raw:96.x445566778899AABBCCDDEEFF</value>
+								</field>
+								<field>
+									<name>tidBank</name>
+									<value>64:xFEDCBA9876543210</value>
+								</field>
+								<field>
+									<name>userBank</name>
+									<value>256:xAAAAFF0000000000000000000000000000000000000000000000000000000000</value>
+								</field>
+								<field>
+									<name>@3.2.18</name>
+									<value>x3</value>
+								</field>
+							</fieldList>
+						</extension>
+					</member>
+					<member>
+						<tag>urn:epc:raw:96.x445566778899AABBCCDDEEFF</tag>
+						<extension>
+							<fieldList>
+								<field>
+									<name>epc</name>
+									<value>urn:epc:raw:96.x445566778899AABBCCDDEEFF</value>
+								</field>
+								<field>
+									<name>tidBank</name>
+									<value>64:xFEDCBA9876543212</value>
+								</field>
+								<field>
+									<name>userBank</name>
+									<value>256:xCCCC0F0000000000000000000000000000000000000000000000000000000000</value>
+								</field>
+								<field>
+									<name>@3.2.18</name>
+									<value>x0</value>
+								</field>
+							</fieldList>
+						</extension>
+					</member>
+				</groupList>
+				<groupCount>
+					<count>2</count>
+				</groupCount>
+			</group>
+		</report>
+	</reports>
+</ale:ECReports>

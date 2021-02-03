@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test:data xmlns:test="urn:havis:middleware:reader:test:xsd:1">
+	<tags>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c000001267</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<!--
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c000001268</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c000001269</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397EFC44B5A20000001269</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397EFC44B5A24000001269</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126a</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126b</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126c</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126d</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126e</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397efc44b5a1c00000126f</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397EFC44B5A24000001268</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397EFC44B5A24000001269</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">00ffef0123456789</bank>
+				<bank id="1">bbb4300030397EFC44B5A24000001270</bank>
+				<bank id="2">e200600305ab8739</bank>
+				<bank id="3">0010004000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		-->
+	</tags>
+</test:data>

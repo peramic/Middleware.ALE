@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>002</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<duration unit="MS">2000</duration>
+	</boundarySpec>
+	<reportSpecs>
+		<reportSpec reportName="Additions" reportIfEmpty="true">
+			<reportSet set="ADDITIONS" />
+			<output includeTag="true" includeCount="true">
+				<extension>
+					<fieldList>
+						<field>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+							<fieldspec>
+								<fieldname>epc</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+							<fieldspec>
+								<fieldname>tidBank</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@1.128</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@1.96.32</fieldname>
+								<datatype>epc</datatype>
+								<format>epc-tag</format>
+							</fieldspec>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@1.8.120</fieldname>
+								<datatype>uint</datatype>
+								<format>decimal</format>
+							</fieldspec>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@1.4.124</fieldname>
+								<datatype>bits</datatype>
+								<format>hex</format>
+							</fieldspec>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@0.64</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+							<fieldspec>
+								<fieldname>001</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+							<fieldspec>
+								<fieldname>nsi</fieldname>
+							</fieldspec>
+						</field>
+						<field>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+							<fieldspec>
+								<fieldname>afi</fieldname>
+							</fieldspec>
+						</field>
+					</fieldList>
+				</extension>
+			</output>
+		</reportSpec>
+	</reportSpecs>
+</ale:ECSpec>

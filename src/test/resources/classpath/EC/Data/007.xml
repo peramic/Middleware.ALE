@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test:data xmlns:test="urn:havis:middleware:reader:test:xsd:1">
+	<tags>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543210</bank>
+				<bank id="3">AAAAFF0000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543211</bank>
+				<bank id="3">BBBBFF0000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543212</bank>
+				<bank id="3">CCCC0F0000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543213</bank>
+				<bank id="3">AAAA020000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543214</bank>
+				<bank id="3">BBBB3F0000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+		<tag>
+			<banks>
+				<bank id="0">0011223344556677</bank>
+				<bank id="1">00112233445566778899AABBCCDDEEFF</bank>
+				<bank id="2">FEDCBA9876543215</bank>
+				<bank id="3">AAAACF0000000000000000000000000000000000000000000000000000000000</bank>
+			</banks>
+		</tag>
+	</tags>
+</test:data>

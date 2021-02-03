@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>001</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<duration unit="MS">1000</duration>
+	</boundarySpec>
+	<reportSpecs>
+		<reportSpec reportName="current" reportIfEmpty="true">
+			<reportSet set="CURRENT" />
+			<groupSpec>
+				<pattern>[x20-x31]</pattern>
+				<pattern>[xe-x12]</pattern>
+				<pattern>&amp;x12=x1b</pattern>
+				<extension>
+					<fieldspec>
+						<fieldname>afi</fieldname>
+					</fieldspec>
+				</extension>
+			</groupSpec>
+			<output includeTag="true" />
+		</reportSpec>
+	</reportSpecs>
+</ale:ECSpec>

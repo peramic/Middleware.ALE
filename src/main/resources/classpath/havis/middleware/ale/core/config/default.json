@@ -1,0 +1,175 @@
+{
+  "global" : {
+    "name" : "Ha-VIS Middleware",
+    "aleid" : "Ha-VIS Middleware",
+    "tdt": "..\/TDT\/src\/main\/resources\/xml",
+    "maxThreads" : 10,
+    "threadTimeout" : 60000,
+    "queueWarningTimeout" : 5,
+    "unicode" : {
+      "patternWhiteSpace" : "[\\s\\u200E-\\u200F]",
+      "patternSyntax" : "[\\u0021-\\u002F\\u003A-\\u0040\\u005B-\\u005E\\u0060\\u007B-\\u007E\\u00A1-\\u00A7\\u00A9\\u00AB-\\u00AC\\u00AE\\u00B0-\\u00B1\\u00B6\\u00BB\\u00BF\\u00D7\\u00F7\\u2010-\\u2027\\u2030-\\u203E\\u2041-\\u205E\\u2190-\\u245F\\u2500-\\u2775\\u2694-\\u2E7F\\u3001-\\u3003\\u3008-\\u3020\\u3030\\uFD3E-\\uFD3F\\uFE45-\\uFE46]"
+    },
+    "urn" : {
+      "trigger" : {
+        "rtc" : "^urn:epcglobal:ale:trigger:rtc:(?<period>\\d+)\\.(?<offset>\\d+)(\\.(?<timezone>(Z|([+-]\\d{2}:\\d{2}))))?$",
+        "http" : "^urn:havis:ale:trigger:http:(?<name>.+)$",
+        "port" : "^urn:havis:ale:trigger:port:(?<reader>.+):(?<type>(in)|(out))(:(?<id>\\d+)(\\.(?<state>[01]))?)?$"
+      },
+      "oid" : "urn:oid:\\d+(\\.[0-9A-Z]+)*(\\.\\*)?",
+      "pattern" : "^urn:epc:(?<type>(id)?pat):(?<scheme>.*):(?<data>.*)$"
+    },
+    "readerCycle" : {
+      "duration" : 300,
+      "count" : 100,
+      "lifetime" : 60000,
+      "extended" : true
+    },
+    "subscriber" : {
+      "connectTimeout" : 1000,
+      "httpsSecurity" : true
+    }
+  },
+  "connector" : {
+    "exits" : {
+      "exit" : [ ]
+    },
+    "readers" : {
+      "reader" : [ ]
+    },
+    "subscribers" : {
+      "subscriber" : [ ]
+    }
+  },
+  "service" : {
+    "lr" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "logicalReaders" : {
+        "logicalReader" : [ ]
+      }
+    },
+    "tm" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "fields" : {
+        "field" : [ ]
+      }
+    },
+    "ec" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "eventCycles" : {
+        "eventCycle" : [ {
+          "name" : "Default",
+          "enable" : false,
+          "subscribers" : {
+            "subscriber" : [ ]
+          },
+          "spec" : {
+            "schemaVersion" : null,
+            "creationDate" : null,
+            "logicalReaders" : {
+              "logicalReader" : [ "BuiltIn" ]
+            },
+            "boundarySpec" : {
+              "startTrigger" : null,
+              "repeatPeriod" : {
+                "value" : 0,
+                "unit" : "MS"
+              },
+              "stopTrigger" : null,
+              "duration" : {
+                "value" : 1000,
+                "unit" : "MS"
+              },
+              "stableSetInterval" : null,
+              "extension" : null,
+              "any" : [ ],
+              "otherAttributes" : { }
+            },
+            "reportSpecs" : {
+              "reportSpec" : [ {
+                "reportSet" : {
+                  "set" : "CURRENT"
+                },
+                "filterSpec" : null,
+                "groupSpec" : null,
+                "output" : {
+                  "extension" : null,
+                  "any" : [ ],
+                  "includeEPC" : true,
+                  "includeTag" : false,
+                  "includeRawHex" : false,
+                  "includeRawDecimal" : false,
+                  "includeCount" : false,
+                  "otherAttributes" : { }
+                },
+                "extension" : null,
+                "any" : [ ],
+                "reportName" : "Default",
+                "reportIfEmpty" : true,
+                "reportOnlyOnChange" : false,
+                "otherAttributes" : { }
+              } ]
+            },
+            "extension" : null,
+            "any" : [ ],
+            "includeSpecInReports" : false
+          }
+        } ]
+      }
+    },
+    "cc" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "commandCycles" : {
+        "commandCycle" : [ ]
+      },
+      "caches" : {
+        "cache" : [ ]
+      },
+      "associations" : {
+        "association" : [ ]
+      },
+      "randoms" : {
+        "random" : [ ]
+      }
+    },
+    "ac" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      }
+    },
+    "pc" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "portCycles" : {
+        "portCycle" : [ ]
+      }
+    },
+    "mc" : {
+      "version" : {
+        "standard" : "1.1",
+        "vendor" : ""
+      },
+      "files" : {
+        "file" : [ ]
+      }
+    }
+  },
+  "debug" : false,
+  "persist" : true,
+  "soapService" : false
+}

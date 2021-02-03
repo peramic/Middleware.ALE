@@ -1,0 +1,3133 @@
+\documentclass[11pt,a4paper,oneside]{article}
+
+% to fix footer in toc
+\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{fancy}}} 
+
+\newif\ifincludecc
+\includecctrue
+
+\newif\ifincluderc
+\includercfalse
+
+\newif\ifincluderfrtwohundred
+\includerfrtwohundredfalse
+
+\newif\ifincludefx
+\includefxfalse
+
+\newif\ifincludetcp
+\includetcptrue
+
+\newif\ifincludeudp
+\includeudptrue
+
+\newif\ifincludefile
+\includefilefalse
+
+\newif\ifincludesql
+\includesqltrue
+
+\newif\ifincludemqtt
+\includemqtttrue
+
+%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsbsy}%for arrows
+\usepackage{multirow}% for multirow tables
+\usepackage{enumerate}% for lists
+\usepackage{lastpage} % for the number of the last page in the document
+\usepackage{fancyhdr} % for header and footer
+\usepackage{graphicx}% for images
+\usepackage{tabularx}% for easier tables
+
+\usepackage{xcolor,colortbl}% for colored tables
+\usepackage{placeins} % um Bilder-floats vor einem \FloatBarrier zu platzieren
+\usepackage{fullpage}%for page formatting
+\usepackage{threeparttable}
+\usepackage[edtable]{lineno}%for line numbers 
+\usepackage{titlesec}%for title formatting
+
+\usepackage{version}
+\includeversion{PDF}
+\excludeversion{HTML}
+
+\titleformat*{\paragraph}{\large\bfseries}
+
+\usepackage{parskip}%Let you configure paragraph breaks and indents properly.
+\setlength{\parindent}{0pt}
+
+
+\usepackage{framed}
+\colorlet{shadecolor}{lightgray}
+
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+            {-2.5ex\@plus -1ex \@minus -.25ex}%
+            {1.25ex \@plus .25ex}%
+            {\normalfont\normalsize\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
+\setcounter{tocdepth}{4}    % how many sectioning levels to show in ToC
+
+
+
+
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\makeatletter
+\DeclareUrlCommand\ULurl@@{%
+  \def\UrlFont{\ttfamily\color{blue}}%
+  \def\UrlLeft{\uline\bgroup}%
+  \def\UrlRight{\egroup}}
+\def\ULurl@#1{\hyper@linkurl{\ULurl@@{#1}}{#1}}
+\DeclareRobustCommand*\ULurl{\hyper@normalise\ULurl@}
+\makeatother
+
+
+% \usepackage[nofligs]{verdana}% verdana fonts
+\usepackage{verdana}% verdana fonts
+\usepackage{courier}%courier fonts
+
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\voffset}{-50pt}
+\setlength{\parindent}{0cm}
+\addtolength{\textheight}{1in}
+\setlength{\arrayrulewidth}{0.9pt} % remove undesired border effect of \rowcolor
+
+% Header/ Footer %
+%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead{}
+
+\fancyfootoffset{5mm}
+\fancyfoot{}
+\lfoot{\footnotesize \it{Copyright \textcopyright  \textcolor{blue}{HARTING IT Software Development GmbH \& Co. KG.} All Rights Reserved.}}
+\cfoot{}
+\rfoot{\footnotesize Page \thepage\ of \pageref{LastPage}}
+
+\setlength{\headheight}{90pt}
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%% for line numbering
+\def\linenumberfont{\normalfont\small\sffamily}
+\def\headerps@out#1{\special{! #1}}%
+\newlength{\columnlines}
+\setlength{\columnlines}{0.2 pt}
+\makeatother
+
+
+\author{HARTING}
+\date{March 31, 2017}
+\title{ALE Vendor Specification}
+
+
+\ifpdf
+\usepackage{tocloft}% for table of contents formatting
+\setlength{\cftsecnumwidth}{2em}% Set length of number width in ToC for \subsection
+\setlength{\cftsubsecnumwidth}{2.8em}% Set length of number width in ToC for \subsection
+\setlength{\cftsubsubsecnumwidth}{4em}% Set length of number width in ToC for \subsection
+\setlength{\cftparanumwidth}{5em}% Set length of number width in ToC for \subsection
+\fi
+
+\setlength{\intextsep}{0.7cm}
+
+\ifpdf
+\definecolor{shadecolor}{rgb}{.9, .9, .9}
+\newenvironment{code}%
+   {\snugshade\begin{internallinenumbers}}%
+   {\end{internallinenumbers}\endsnugshade}
+\else
+\newenvironment{code}
+    {\HCode{<div class='code'><p>}}
+    {\HCode{</p></div>}}
+\fi
+
+\ifpdf
+\newenvironment{bbox}%
+{\begin{table}[h!]\begin{threeparttable}}%
+{\end{threeparttable}\end{table}\FloatBarrier}
+\else
+\newenvironment{bbox}
+{\ifvmode\IgnorePar\fi \EndP\Tg<div class='bbox'>}{\Tg</div>\IgnoreIndent}
+ \fi
+\newenvironment{img}
+{\ifvmode\IgnorePar\fi \EndP\HCode<img}{\HCode{/>}\IgnoreIndent}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%\tabulinesep=1.2mm
+\linenumbers
+\renewcommand{\arraystretch}{1.5}
+\ifpdf
+\includegraphics[width=400px]{img/harting.png}
+\else
+\begin{img}
+\input{img/harting.txt}
+\end{img}
+\fi
+\hspace{1pt} 
+\bigskip
+
+\large
+
+\subsection*{The Application Level Events (ALE) Vendor Specification\\
+Vendor HARTING IT Software Development GmbH \& Co KG\\
+Version 2.4.0}
+
+Project: Ha-VIS RF-R350 / Ha-VIS Middleware\\
+Document Owner: HARTING IT Software Development GmbH \& Co KG\\
+Document Date: 2019-07-01\\
+Document State: Approved
+
+\vspace{40pt}
+\nolinenumbers
+\fcolorbox{blue}{white}{
+\begin {minipage}{\textwidth}
+\ifpdf
+\begin{internallinenumbers}
+\fi
+\bigskip
+
+\begin{center}
+\textcolor{blue}{\textbf{Copyright notice}}
+\end {center}
+\bigskip
+{\color{blue}
+\copyright HARTING IT Software Development GmbH \& Co. KG,}\ifpdf\\\fi
+{\color{blue} Espelkamp, Germany}\\
+
+{\color{blue}All rights are reserved, including those of the translation.
+No part of this document may be reproduced in any form (print, photocopy,
+microfilm or by any other method), processed, duplicated or distributed by
+means of electronic systems without the written permission of HARTING IT
+Software Development GmbH \& Co. KG, Espelkamp, Germany.}\\
+
+{\color{blue}Subject to alterations without notice.}
+\ifpdf
+\end {internallinenumbers}
+\fi
+\end{minipage}
+}
+
+\linenumbers
+\pagebreak
+\section*{Document Version History}
+
+
+\begin{table}[!h]
+\begin{tabularx}{\columnwidth}{|R|R|R|R|R|}
+\rowcolor{lightgray}
+\hline
+\textbf{Version} & \textbf{ State} & \textbf{Author} & \textbf{ Date} & \textbf{Changes}\\
+\hline
+1.3.0 & Approved & LEB & 2016-10-01 & Initial creation for Product Version 1.3.0
+\\ \hline
+1.4.0 & Approved & DGR & 2017-01-09 & Updated to refer to Product Version 1.4.0
+\\ \hline
+1.5.0 & Approved & DGR & 2017-01-31 & Updated to refer to Product Version 1.5.0
+\\ \hline
+1.6.0 & Approved & DGR & 2017-06-31 & Updated to refer to Product Version 1.6.0
+\\ \hline
+1.7.0 & Approved & DGR & 2017-09-30 & Updated to refer to Product Version 1.7.0
+\\ \hline
+2.0.0 & Approved & DGR & 2018-07-19 & Updated to refer to Product Version 2.0.0
+\\ \hline
+2.1.0 & Approved & DGR & 2018-10-01 & Updated to refer to Product Version 2.1.0
+\\ \hline
+2.2.0 & Approved & DGR & 2019-01-01 & Updated to refer to Product Version 2.2.0
+\\ \hline
+2.2.1 & Approved & DGR & 2019-02-01 & Updated to refer to Product Version 2.2.1
+\\ \hline
+2.3.0 & Approved & DGR & 2019-04-01 & Updated to refer to Product Version 2.3.0
+\\ \hline
+2.4.0 & Approved & DGR & 2019-07-01 & Updated to refer to Product Version 2.4.0
+\\ \hline
+\end{tabularx}
+\MakeLineNo 
+\end{table}
+\FloatBarrier
+
+\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents\thispagestyle{fancy}
+
+\pagebreak
+\listoftables\thispagestyle{fancy}
+
+\pagebreak
+\section*{List of Abbreviations}
+
+\begin{table}[ht]
+\begin{threeparttable}
+\begin{edtable}{tabular}{l*{3}{l}}
+
+AC &Access Control \\
+ALE&Application Level Events\\
+API&Application Programming Interface\\
+\ifincludecc
+CC & Command Cycle\\
+\fi
+DNS &	Domain Name System\\
+EC & Event Cycle\\
+EPC &	Electronic Product Code\\
+HTTP & Hypertext Transfer Protocol\\
+IP & Internet Protocol\\
+ISO &	International Organization for Standardization\\
+LLRP & Low Level Reader Protocol\\
+LR &Logical Reader\\
+PC & Port Cycle\\
+\ifincluderc
+RC & Reader Configuration\\
+\fi
+RFC & Request for Comments\\
+RNG & Random Number Generator\\
+RTC & Real Time Clock\\
+SQL &	Structured Query Language\\
+TCP &	Transmission Control Protocol\\
+TID &	Transponder Identifier\\
+TM & Tag Memory\\
+URI & Uniform Resource Identifier\\
+URL & Uniform Resource Locator\\
+XML &  Extensible Markup Language\\
+XSD & XML Schema Definition\\
+\end{edtable}
+\end{threeparttable}
+\end{table}
+\FloatBarrier
+\pagebreak
+
+\section{Introduction}
+This document specifies vendor extensions and implementation specific behavior of the ALE HARTING IT Software Development GmbH \& Co KG Vendor implementation of the ALE 1.1.1 standard specification. 
+
+\section{ALE Vendor Interfaces}
+The HARTING IT Software Development GmbH \& Co KG vendor specification for ALE defines two additional interfaces, as defined below.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|R|R|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Interface}} &\multicolumn{1}{c|}{\textbf{Description}}&
+\textbf{Normative section}\newline\textbf{of this document} \\
+\hline
+Digital Input and Output API&An interface through which clients may cause operation to be performed on digital inputs and outputs.&Section \ref{subsec:ALEdigi}\\
+\ifincluderc
+\hline
+Reader Configuration API&An interface through which clients may obtain configuration information from logical readers.&Section \ref{subsec:ALEReader}\\
+\fi
+\hline
+\end{tabularx}
+\caption{ ALE Vendor APIs}
+\ifpdf
+\MakeLineNo 
+\fi
+\end{table}
+\FloatBarrier
+
+\subsection{UML Notation for APIs}
+See Section 4.1 of the ALE specification document.
+
+\subsection{Version Introspection Methods}
+Each of the two HARTING IT Software Development GmbH \& Co KG Vendor APIs includes a pair of methods having the following signature:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|R|}
+\hline
+\texttt{\textendash \textendash \textendash}\\
+\texttt{getStandardVersion() : String}\\
+\texttt{getVendorVersion() : String}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+\newpage
+
+This ALE vendor implementation implements these methods for the Vendor APIs as specified in the following table:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Method}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{getStandardVersion}&Returns a string that identifies what version of the specification this implementation of the API complies with. The possible values for this string are defined by HARTING IT Software Development GmbH \& Co KG. The implementation returns a string corresponding to a version of this specification to which the API implementation fully complies, and returns the string corresponding to the latest version to which it complies. To indicate compliance with this version 1.1 of the ALE specification, the implementation returns the string 1.1.\\
+\hline
+\texttt{getVendorVersion} &Returns a string that identifies what vendor extensions of the API this implementation provides. This implementation returns a non-empty string. The value returned is a URI where this ALE implementation is the owning authority. This URI is a HTTP URL which leads to a copy of this document.\\
+\hline
+\end{tabularx}
+ \caption{Version Interface Methods}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+For the five standard ALE APIs see section 4.3 of the ALE specification document.
+
+\subsection{Classes Common to the Reading, Writing and Digital Input and Output APIs}
+The following six classes are used by all three the Reading API, the Writing API and the Digital Input and Output API. While their names begin with EC prefix used for Reading API classes, they should be understood as belonging equally to the Reading API, the Writing API and the Digital Input and Output API.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Class}}&
+\textbf{Specified in Section of ALE specification Document}\\
+\hline
+\texttt{ECTime}&8.2.2\\
+\hline
+\texttt{ECTimeUnit}&8.2.3\\
+\hline
+\texttt{ECTrigger}&8.2.4\\
+\hline
+\texttt{ECFilterListMember}&8.2.8\\
+\hline
+\texttt{ECReaderStat}&8.3.10\\
+\hline
+\end{tabularx}
+\caption{List of Common ALE Classes}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Class}}&
+\textbf{Specified in Section of this Vendor specification  Document}\\
+\hline
+\texttt{ECSightingSignalStat}&\ref{subsec:ECSigh}\\
+\hline
+\end{tabularx}
+\caption{List of Common Vendor Classes}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{Scoping of Names}
+See section 4.6 of the ALE specification document.\\
+The following table enumerates additional namespaces that are implied by this Vendor-Extension.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|R|R|R|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Namespace}}&
+\multicolumn{1}{c|}{\textbf{Section}}&
+\multicolumn{1}{c|}{\textbf{Scope}}\\
+\hline
+ PCSpec name & \ref{subsec:ALEdigi} & Global\\
+\hline
+PCReport & \ref{subsec: PCRep} & Enclosing PCSpec\\
+\hline
+\end {tabularx}
+\caption{ List of Namespacess}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\section{ALE Concepts and Principles of Operation}
+This section describes the concepts and principles of operation that underlie the specification of the ALE Digital Input and Output API. See also section 5 of the ALE specification document.
+
+\subsection{Port Cycles}
+A port cycle is the smallest unit of interaction between an ALE client and an ALE implementation through the ALE Digital Input and Output API. A port cycle is an interval of time during which operations performed on ports. At the conclusion of a port cycle, a report is sent to the ALE client containing information about what events cause the operations and what the results were.
+
+As in an event cycle, the ALE client specifies when a port cycle starts and stops. During the port cycle, the ALE implementation uses one or more readers to operate on ports when a tag falls within the detection zone of a reader or a trigger event occurred.
+
+The interaction between an ALE client and an ALE implementation through the Digital Input and Output API is similar to the description of the Reading API and Writing API from the ALE specification document section 5.2 and section 5.3. Namely,
+\begin{enumerate}
+\item	A client provides to the ALE implementation an \emph{port cycle specification} (PCSpec), which specifies
+\begin{itemize}
+\item	one or more readers (this is done indirectly, as explained in Section 10 of the ALE specification document)
+\item port cycle boundaries, and
+\item	a set of reports with operations to apply to ports. Each report includes
+\begin{itemize}
+\item	a filter list that specifies which tags cause port operations to be processed,
+\item	a trigger list that specifies which trigger events cause port operations to be processed, and
+\item	an ordered list of operations to perform on specific ports
+\end{itemize}
+\end{itemize}
+\item The ALE layer responds by carrying out the operations on ports, and returning a report that describes what processing was performed on ports, which event causes the port operations and what the results of the operations are.
+\end {enumerate}
+
+\ifincludecc
+\subsection{Execution of Event\ifincludecc and Command \fi Cycles}
+See section 5.6 of the ALE specification document.
+
+If the HARTING IT Software Development GmbH \& Co KG vendor implementation receives a second \texttt{poll} call for a spec for which there is already an outstanding \texttt{poll} call, and the second \texttt{poll} call specifies the same parameter values as the first, this ALE implementation satisfies the second \texttt{poll} call by initiating a new cycle.
+\fi
+
+\subsection{Execution of Port Cycles}
+\label{subsec:Execution}
+The execution of a port cycle is similar to the description of event cycle and command cycles from the ALE specification document section 5.6.
+
+\section{Build-in Fieldnames, Datatypes, and Formats}
+See Section 6 of the ALE specification document
+
+\subsection{	Build-in Fieldnames}
+This section defines the implementation depended behavior for fieldnames that are pre-defined by the ALE specification. The HARTING IT Software Development GmbH \& Co KG  vendor implementation recognizes each fieldname defined in section 6.1 of the ALE specification document and interprets it as defined in the specification. In addition, this ALE implementation implements the Tag Memory API and recognizes fieldnames defined through that API (see section 7 of the ALE specification document).
+
+\subsubsection{Type of Tags}
+When interacting with a Gen2 tag, the HARTING IT Software Development GmbH \& Co KG  vendor implementation behaves as specified in the ALE specification document section 6.1. When interacting with any other type of tag, this ALE implementation will not consider that tag and will exclude any tag types others then Gen2 from all reports.
+
+\subsubsection{Memory Bank Fieldnames}
+The HARTING IT Software Development GmbH \& Co KG  vendor implementation recognizes any memory bank fieldnames that are specified in section 6.1 of the ALE specification document.\\
+ This ALE implementation supports also reading or writing to the end of a memory bank therefore it will not raise an  ''operation not possible'' condition when an attempt is made to read from or write into the \texttt{epcBank, tidBank} or \texttt{userBank} field.
+
+\subsubsection{Variable Fieldnames}
+This HARTING IT Software Development GmbH \& Co KG  vendor implementation recognizes any string specified in sub-section 6.1.9.2 of the ALE specification document as a valid variable fieldname. This ALE implementation does not support those variable fieldnames for WRITE, READ, ADD and DELETE operations of the Writing API and for the Reading API, therefore an attempt to do so will always raise an ''operation not possible'' condition.
+
+\subsection{Build-in Datatypes and Formats}
+This section defines the implementation depended behavior for datatypes and formats that are pre-defined by the ALE specification. The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes each datatype and format defined in section 6.2 of the ALE specification document and interprets it as defined in the specification. 
+
+\subsubsection{The \texttt{bits} Datatype}
+The HARTING IT Software Development GmbH \& Co KG  vendor implementation recognizes the string bits as a valid datatype as specified in section 6.2.3 of the ALE specification document.
+
+When writing a value of type bits, for this implementation the table 22 in sub-section 6.2.3.1 of the ALE specification document is used based on the number of bits in the bits value (M) and the number of bits in the field (N).
+
+The case M\textless N only requires writing the entire bits value to the field beginning at the field's leftmost position. This ALE implementation also pads the remaining part of the field with \emph{zero bits.}
+
+\section{ALE Reading API}
+See Section 8 of the ALE specification document.
+
+\subsection{ECSpec}
+See Section 8.2 of the ALE specification document.
+
+\begin{code}
+\emph{Note that the  HARTING IT Software Development GmbH \& Co KG  vendor implementation supports \texttt{primaryKeyFields} for all logical readers.This ALE implementation will therefore not raise an \texttt{ECSpecValidationException} if the \texttt{primaryKeyFields} parameter is specified.}
+\end{code}
+
+\subsubsection{ECTrigger}
+\label{subsec:ECTrig}
+
+See Section 8.2.4 of the ALE specification document.
+\paragraph{Real-time Clock Trigger}
+The HARTING IT Software Development GmbH \& Co KG  vendor implementation provides support for real-time clock trigger URIs as defined in section 8.2.4.1 of the ALE specification document.
+
+If the \texttt{timezone} parameter within a trigger of this form is omitted this ALE implementation choose the time zone configured in the operating system in which the implementation is running.
+
+\paragraph{HTTP Trigger}
+URIs beginning with the string \texttt{urn:havis:ale:trigger:http:} are reserved for triggers specified below. The HARTING IT Software Development GmbH \& Co KG  vendor implementation provides support for trigger URIs of this form. This ALE implementation conforms to the following specification for all such URIs valid according to the specification below.
+
+A HTTP trigger takes the following form:
+
+\texttt{urn:havis:ale:trigger:http:name}
+
+where name is specified below.
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Syntax}}&
+\multicolumn{1}{c|}{\textbf{Meaning}}\\
+\hline
+\texttt{name}&A (non-empty) string that is accepted by the implementation according to section 4.5 of the ALE specification Document.&The name of a http web address which should be observed by the ALE implementation. \\
+\hline
+\end {tabularx}
+\caption{HTTP Trigger URI Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+This ALE implementation interprets a trigger of this form as follows. The trigger is delivered each time the specified web address is called via HTTP protocol using the GET operation. The implementation provides a HTTP Web Service to listening on incoming GET operation calls via HTTP protocol in one of the following forms:\\
+\ULurl{http://host:port/implementation-defined-URL/trigger-name}\\
+\ULurl{http://host/implementation-defined-URL/trigger-name}
+
+where
+\begin{itemize}
+\item\texttt{host} is the DNS name or IP address of the host where the ALE implementation is listening for incoming calls via HTTP protocol using the GET operation.
+\item\texttt{port} is the TCP port on which the ALE implementation is listening for incoming calls via HTTP protocol using the GET operation. The port and the preceding colon character may be omitted, in which case the port defaults to 80.
+\item\texttt{implementation-defined-URL} is the URL part on which the ALE implementation will register triggers defined using the HTTP trigger syntax.
+\item\texttt{trigger-name} is the name of a trigger defined by the user using the HTTP trigger syntax.
+\end{itemize}
+\begin{code}
+\emph{Example (non-normative)}
+
+\emph{The Condition:\\
+The implementation provides a HTTP Web Service at the following URL:}
+
+\texttt{\textcolor{blue}{http://<Container Host>:8888/services/ALE/trigger/}}
+
+\emph{The following trigger URI denotes a trigger that occurs every time the \\
+HTTP Web Address:}
+
+\texttt{\textcolor{blue}{http://<Container Host>:8888/services/ALE/trigger/example}}
+
+\emph{is called via HTTP protocol using the GET operation}
+
+\texttt{urn:havis:ale:trigger:http:example}
+\end{code}
+
+\paragraph{Port Trigger}
+URIs beginning with the string \texttt{urn:havis:ale:trigger:port:} are reserved for triggers specified below. The HARTING IT Software Development GmbH \& Co KG vendor implementation provides support for trigger URIs of this form. This ALE implementation conforms to the following specification for all such URIs valid according to the specification below.
+
+A port trigger takes one of the three following forms:
+
+\texttt{urn:havis:ale:trigger:port:reader.type\\
+urn:havis:ale:trigger:port:reader.type.id\\
+urn:havis:ale:trigger:port:reader.type.id.state}
+
+where \texttt{reader, type, id,} and \texttt{state} are specified below.
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.30\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.55\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Syntax}}&
+\multicolumn{1}{c|}{\textbf{Meaning}}\\
+\hline
+\texttt{reader}&A string corresponding to a \texttt{reader} defined through the Logical Reader API.&The name of a logical reader with digital inputs and/or outputs which should be observed \\
+\hline
+\texttt{Type}&One of the indicators 'in' or 'out'.&The type of the port that should be observed.
+\newline 'in' means an input port.
+\newline 'out' means an output port.\\
+\hline
+\ifpdf
+\end{tabular}
+\end{table}
+
+\begin{table}
+\begin{tabular}{ 
+|p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.30\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.55\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\fi
+\texttt{Id}&A decimal integer corresponding to a port id.&(Optional)The id of the port that should be observed.
+\newline If the id is omitted the trigger will be fired on every port id of the specified type.\\
+\hline
+\texttt{State}&One of the decimal integers 0 or 1.&(Optional)The state corresponding to the state of the port that should be observed.
+\newline 1 means the port is set.
+\newline 0 means the port is not set.
+\newline If \texttt{state}  is omitted the trigger will be fired on every port status change regardless of the state.\\
+\hline
+\end {tabular}
+\caption{Port Trigger URI Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+This ALE implementation interprets a trigger of this form as follows. The trigger is delivered each time the given port of the defined reader changed the status to the state corresponding to \texttt{state}. If \texttt{state} is omitted the trigger is delivered regardless of the port state. If \texttt{id} is omitted the trigger is delivered regardless of the port id.
+
+\begin {code}
+\emph{Example (non-normative) The following trigger URI denotes a trigger that occurs every time a specified input port state is set:}\
+
+\texttt{urn:havis:ale:trigger:port:ExampleReader.in.1.1}\
+
+\emph{The following trigger denotes a trigger that occurs every time a specified input port changed its port state:}
+
+\texttt{urn:havis:ale:trigger:port:ExampleReader.in.1}
+
+\emph{The following trigger denotes a trigger that occurs every time a unspecified input port changed its port state:}
+
+\texttt{urn:havis:ale:trigger:port:ExampleReader.in}
+\end{code}
+
+\subsubsection{ECReportSetSpec}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation interprets an instance of  \texttt{ECReportSetSpec} as specified in section 8.2.6 of the ALE specification document.
+
+\begin {code}
+\emph{Note that for the first event cycle to completed after the subscribe call for a given subscriber, and for a poll call, this ALE implementation refer ''the prior set of tags'' to the empty set.}
+\end{code}
+
+\subsubsection{ECStatProfileName}
+Each valid value of \texttt{ECStatProfileName} names as statistics profile that can be included in an \texttt{ECReports}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$\texttt{Enumerated Type}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ECStatProfileName}}\\
+\texttt{TagTimestamps}\\
+\texttt{TagCount}\\
+\texttt{ReaderNames}\\
+\texttt{ReaderSightingSignals}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+\subsection{ECReports}
+See Section 8.3 of the ALE specification document.
+\subsubsection{ECReaderStat}
+See section 8.3.10 of the ALE specification document.
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation adds one \texttt{ECReaderStat} for each reader to the \texttt{statBlocks} parameter list of an \texttt{ECTagStat} and the \texttt{ECTagStat} is included in an 
+\ifpdf\\ \fi
+\texttt{ECReportGroupListMember} if the \texttt{ReaderNames} statistics profile was included in the corresponding \texttt{ECReportSpec}.
+
+The \texttt{readerName} parameter of the \texttt{ECReaderStat} refers to a logical reader name as named in the defining \texttt{ECSpec.}
+
+\subsubsection{ECTagCountStat}
+\texttt{ECTagCountStat} is a subclass of \texttt{ECTagStat}. The HARTING IT Software Development GmbH \& Co KG vendor implementation includes one \\\texttt{ECTagCountStat} in an \texttt{ECReportGroupListMember} if the \texttt{TagCount} statistics profile was included in the corresponding \texttt{ECReportSpec}.\\\texttt{ECTagCountStat} includes all of the fields in \texttt{ECTagStat}, plus the following additional fields:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ECTagCountStat}}\\
+\texttt{count : int }\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs an \texttt{ECTagCountStat} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.20\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.35\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.45\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{profile}&\texttt{ECStatProfileName}&This field contains the \texttt{TagCount} value of \texttt{ECStatProfileName.}\\
+\hline
+\texttt{statBlock}&\texttt{List <ECReaderStat>}&This field contains an empty list.\\
+\hline
+\ifpdf
+\end {tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.20\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.35\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.45\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\fi
+\texttt{count}&\texttt{int}&This field contains the count how often this tag was seen within this event cycle by any reader contributing to this event cycle.\\
+\hline
+\end {tabular}
+\caption{ECTagCountStat Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{ECSightingSignalStat}
+\label{subsec:ECSigh}
+\texttt{ECSightingSignalStat} is a subclass of \texttt{ECSightingStat}. The HARTING IT Software Development GmbH \& Co KG vendor implementation adds one \texttt{ECSightingSignalStat} for each sighting to the \texttt{sightings} parameter list of an \texttt{ECReaderStat}, an \texttt{ECReaderStat} is added for each reader to \texttt{statBlocks} parameter list of an \texttt{ECTagStat} and the \texttt{ECTagStat} is included in an \texttt{ECReportGroupListMember} if the \texttt{ReaderSightingSignals} statistics profile was included in the corresponding \texttt{ECReportSpec}.\\
+An \texttt{ECSightingSignalStat} contains signal parameter information about a single sighting of a tag by a particular \texttt{antenna} of a particular \texttt{host}.\\
+\texttt{ECSightingSignalStat} includes all of the fields in \texttt{ECSightingStat}, plus the following additional fields:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ECSightingSignalStat}}\\
+\texttt{host : String }\\
+\texttt{antenna : int}\\
+\texttt{strength : int}\\
+\texttt{timestamp : date}\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs an ECSightingSignalStat as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{host}&\texttt{String}&This field contains the \texttt{host} name value for this particular sighting.\\
+\hline
+\texttt{Antenna}&\texttt{int}&This field contains the \texttt{antenna} id value for this particular sighting.\\
+\hline
+\texttt{Strength}&\texttt{int}&This field contains the \texttt{strength} value for this particular sighting.\\
+\hline
+\texttt{Timestamp}&\texttt{date}&This field contains the \texttt{timestamp} value for this particular sighting.\\
+\hline
+\end {tabularx}
+\caption{ECSightingSignalStat Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{readerName} parameter of the surrounding \texttt{ECReaderStat} refers to a logical reader name as named in the defining \texttt{ECSpec.}
+
+
+\begin {code}
+\emph{Note the} \texttt{ECSightingSignalStat} \emph{is used by all three the Reading API, the Writing API and the Digital Input and Output API. Unless otherwise noted, the interpretation of an} \texttt{ECSightingSignalStat} \emph{instance is the same in all three APIs.}
+\end{code}
+
+\ifincludecc
+\section{ALE Writing API}
+See Section 9 of the ALE specification document.
+
+\subsection{CCSpec}
+See Section 9.3 of the ALE specification document.
+
+\subsubsection{CCOpType}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes every CCOpType value as specified in section 9.3.5 of the ALE specification document.
+
+\paragraph{CUSTOM Operation}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes CUSTOM as a \texttt{CCOpType}. For such operations, the fieldspec must be omitted and the data string in the \texttt{CCOpDataSpec} must be defined using the \texttt{bits} datatype and \texttt{hex} format. The data returned in the \texttt{CCOpReport} will also be formatted using the \texttt{bits} datatype and \texttt{hex} format.
+
+This operation essentially sends binary data to the reader, which in return answers with binary data. The specific binary data to send to the reader depends on the model of the reader and the tag used.
+
+\paragraph{CHECK Operation}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes the values \texttt{epcBank} and \texttt{userBank} as valid fieldspec values for the CHECK \texttt{CCOpType} as defined in section 9.3.5.1 of the ALE specification document. 
+
+This ALE implementation supports the ISO 15962 standard in Data Format 9, for all other formats the CHECK operation will result in a \texttt{CCOpStatus} of\\ \texttt{OP\_NOT\_POSSIBLE\_ERROR}.
+
+\paragraph{INITIALIZE Operation}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes the values \texttt{epcBank} and \texttt{userBank} as valid fieldspec values for the INITIALIZE \texttt{CCOpType} as defined in section 9.3.5.2 of the ALE specification document. 
+
+This ALE implementation supports the ISO 15962 standard in Data Format 9, for all other formats the INITIALIZE operation will raise the ''operation not possible'' condition and this always results in a \texttt{CCOpStatus} of \texttt{OP\_NOT\_POSSIBLE\_ERROR}.
+
+
+\subsubsection{CCStatProfileName}
+Each valid value of \texttt{CCStatProfileName} names as statistics profile that can be included in a \texttt{CCReports}.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$\texttt{Enumerated Type}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{CCStatProfileName}}\\
+\texttt{TagTimestamps}\\
+\texttt{TagCount}\\
+\texttt{ReaderNames}\\
+\texttt{ReaderSightingSignals}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+\subsection{CCReports}
+See Section 9.4 of the ALE specification document.
+\subsubsection{CCTagTimestampStat}
+\texttt{CCTagTimestampStat} is a subclass of \texttt{CCTagStat}. The HARTING IT Software Development GmbH \& Co KG vendor implementation includes one \texttt{CCTagTimestampStat} in a \texttt{CCTagReport} if the \texttt{TagTimestamps} statistics profile was included in the corresponding \texttt{CCCmdSpec. CCTagTimestampStat} includes all of the fields in \texttt{CCTagStat}, plus the following additional fields:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{CCTagTimestampStat}}\\
+\texttt{firstSightingTime : dateTime}\\
+\texttt{lastSightingTime : dateTime}\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs a \texttt{CCTagTimestampStat} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.28\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.32\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.40\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{profile}&\texttt{CCStatProfileName}&This field contains the\newline \texttt{EventTimestamp } value of \texttt{CCStatProfileName}.\\
+\hline
+\texttt{statBlock}&\texttt{List <ECReaderStat>}&This field contains an empty list.\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.28\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.32\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.40\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{firstSightingTime}&\texttt{dateTime}&This field contains the first time within this command cycle that the tag was seen by any reader contributing to this command cycle.\\
+\hline
+\texttt{lastSightingTime}&\texttt{dateTime}&This field contains the last time within this command cycle that the tag was seen by any reader contributing to this command cycle.\\
+\hline
+\end{tabular}
+\caption{CCTagTimestampStat  Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{CCTagCountStat}
+\texttt{CCTagCountStat} is a subclass of \texttt{CCTagStat}. The HARTING IT Software Development GmbH \& Co KG vendor implementation includes one\\ \texttt{CCTagCountStat} in a \texttt{CCTagReport} if the \texttt{TagCount} statistics profile was included in the corresponding \texttt{CCCmdSpec}. \texttt{CCTagCountStat} includes all of the fields in \texttt{CCTagStat}, plus the following additional fields
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{CCTagCountStat}}\\
+\texttt{count : int}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs a \texttt{CCTagCountStat} as follows:
+ 
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{profile}&\texttt{CCStatProfileName}&This field contains the \texttt{TagCount} value of \texttt{CCStatProfileName}.\\
+\hline
+\texttt{statBlock}&\texttt{List <ECReaderStat>}&This field contains an empty list.\\
+\hline
+\texttt{Count}&\texttt{int}&This field contains the count how often this tag was seen within this command cycle by any reader contributing to this command cycle.\\
+\hline
+\end{tabularx}
+\caption{CCTagCountStat   Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{Random Number Generator}
+This HARTING IT Software Development GmbH \& Co KG vendor implementation interprets an RNGSpec as specified in section 9.7.2 of the ALE specification document. This ALE implementation does not define extensions to that class in order to provide additional parameters to control the behavior of a random number generator.
+\fi
+
+\section{ALE Logical Reader API}
+
+\subsection{API}
+
+See section 10.3 of the ALE specification document.
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation does not support to change the definition of a logical reader that is used by an \texttt{ECSpec\ifincludecc , CCSpec \fi} or \texttt{PCSpec} that is active at the time the change is requested. Therefore the \texttt{update, addReaders, setReaders, removeReaders}, and \texttt{setProperties} methods will raise an \texttt{InUseException} any time a client calls these methods for a logical reader that is in use by an active \texttt{ECSpec\ifincludecc , CCSpec \fi} or \texttt{PCSpec}. An \texttt{ImmutableReaderException} will be raised when trying to update, undefine or change properties of the Built-In reader (see \ref{par:builtin}).
+
+\subsection{LRSpec}
+See section 10.4 of the ALE specification document.
+
+In addition the HARTING IT Software Development GmbH \& Co KG vendor implementation supports API-defined Base Reader for logical readers see section \ref{subsec:APIdef}. The implementation will therefore not raise a \\
+\texttt{ValidationException} if the \texttt{isComposite} parameter is false.
+
+\subsection{API-defined Base Reader}
+\label{subsec:APIdef}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation supports a mechanism to define a new base reader using the \texttt{define} method of the Logical Reader API. This ALE implementation uses the \texttt{properties} parameter of an \texttt{LRSpec} to forward information about the communication with a physical reader to the ALE. 
+
+Therefore the implementation specifies vendor specific properties and organized these properties in namespaces as specified in the below table.
+
+In the following descriptions the term ''Connector'' refers to a unit to execute the communication with a physical reader and to provide an abstract interface to interact with this unit. For each type of physical reader a different ''Connector'' unit is used for interaction but every ''Connector'' provides the same interface. The term ''Controller'' refers to a unit to manage the interaction between the ALE and one ''Connector'' unit and thereby to the physical reader.
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.35\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.65\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 2
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Namespace}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+&If namespace is omitted this means the common namespace is used which indicates that the property is recognized and handled by the Logical Reader API itself (i.e. tag smoothing parameter see section \ref{subsec:TagSmoothing}).\\
+\hline
+\texttt{Controller.}&The \texttt{Controller} namespace indicates that the property is recognized and handled by the ''Controller'' unit.\\
+\hline
+\texttt{Connector.}&The \texttt{Connector} namespace indicates that the property is recognized and handled by the ''Connector'' unit.\\
+\hline
+\texttt{Reader.}&The \texttt{Reader} namespace indicates that the property is recognized and handled also by the ''Connector'' unit, but this namespace is reserved for specific ''Connector'' type properties defined by each ''Connector'' type.\\
+\hline
+\end{tabular}
+\caption{Reader Property Namespaces}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+\begin{itemize}
+\item A property \texttt{name} within the common namespace is not recognized by the implementation.
+\item A property \texttt{name} with specified namespace is within a namespace that is not recognized by the implementation
+\item The value specified for a property is not legal value for that property.
+\item The specified \texttt{name} is the same as a \texttt{name} of another \texttt{LRProperty} within the same \texttt{LRSpec.}
+\end{itemize}
+
+This ALE implementation will use one ''Controller'' unit for every base reader defined using the \texttt{define} method of the Logical Reader API and one ''Connector'' unit for each ''Controller''.
+ 
+\newpage
+
+The following picture shows non-normative the integration of these units in the ALE:
+
+\begin{figure}[!h]
+\center 
+\ifpdf
+\includegraphics[width=290px]{img/Reader.png}
+\else
+\begin{img}
+\input{img/Reader.txt}
+\end{img}
+\fi
+\caption{API-defined Base Reader Interaction}
+\MakeLineNo
+\end{figure}
+\FloatBarrier
+
+The picture shows the interaction between event, command, port cycle instances and an API-defined Base Reader using ''Controller'' and ''Connector'' units for communication to a physical reader. While the diagram shows two different ways for the ''Controller'' unit to deliver a response, the decision if the ''Controller'' sends its response directly to the cycle or bypass it over the logical reader is made by the logical reader instance. If the logical reader instance has to handle the response like when tag smoothing is activated (see section \ref{subsec:TagSmoothing}) the response will be passed through the logical reader otherwise the response will be delivered directly.
+
+This ALE implementation recognizes the properties for each namespace as defined in the following four sub-sections.
+
+\subsubsection{Common Namespace}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes a set of \texttt{LRProperty} parameters, which an ALE client set using the \texttt{properties} parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API for the common namespace. This ALE implementation interprets these parameters as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{ReaderType}&A string that refers to the type of ''Connector'' unit which is used to interact with the specific physical reader.\\
+\hline
+\texttt{GlimpsedTimeout}&(Optional) A tag smoothing property, see section \ref{subsec:TagSmoothing} of this document and section 10.6 of the ALE specification document.\\
+\hline
+\texttt{ObservedTimeThreshold}&(Optional) A tag smoothing property, see section \ref{subsec:TagSmoothing} of this document and section 10.6 of the ALE specification document.\\
+\hline
+\texttt{ObservedCountThreshold}&(Optional) A tag smoothing property, see section \ref{subsec:TagSmoothing} of this document and section 10.6 of the ALE specification document.\\
+\hline
+\texttt{LostTimeout}&(Optional) A tag smoothing property, see section \ref{subsec:TagSmoothing} of this document and section 10.6 of the ALE specification document.\\
+\hline
+\texttt{AntennaID}&(Optional) An antenna restriction property, see section \ref{subsec:Antenna}. \\
+\hline
+\end{tabularx}
+\caption{Common Namespace Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+
+\begin{itemize}
+\item 	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true and \texttt{ReaderType} property is specified.
+\item	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is false and \texttt{ReaderType} property is null, omitted or has a value that is not known to the implementation.
+\end{itemize}
+
+\subsubsection{Controller Namespace}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes a set of \texttt{LRProperty} parameters, which an ALE client set using the properties parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API for the controller namespace. This ALE implementation interprets these parameters as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{Controller.Timeout}&(Optional) A timespan, in milliseconds that governs the timespan after which no response from a ''Connector'' unit results in a timeout. Note that a too-small value for \texttt{Controller.Timeout} including \emph{zero} value will cause the ''Controller'' to achieve the timeout condition immediately\\
+\hline
+\texttt{Controller.ReconnectDelay}&(Optional) A timespan, in milliseconds that defines the delay before a reconnect will be attempted after the connection to the reader has been lost. The default value is \texttt{2000}.\\
+\hline
+\texttt{Controller.OptimizeWriteOperations}&(Optional) A boolean that defines whether writing operations in the ALE Writing API will be optimized. When \texttt{true}, operations defined inside a \texttt{CCCmdSpec}, writing to the same blocks, on the same memory bank, will be optimized to only write once, to reduce the workload of the reader. The default value is \texttt{true}.\\
+\hline
+\end {tabularx}
+\caption{Controller Namespace Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+\begin{itemize}
+\item If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true and any property of the controller namespace is specified.
+\item If the value of the \texttt{Controller.Timeout} property is a non-null string that is not parseable as a non-negative decimal numeral.
+\item If the value of the \texttt{Controller.ReconnectDelay} property is a non-null string that is not parseable as a non-negative decimal numeral.
+\item If the value of the \texttt{Controller.OptimizeWriteOperations} property is a non-null string that is not parseable as \texttt{true} or \texttt{false}.
+\end{itemize}
+
+\subsubsection{Connector Namespace}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes a set of \texttt{LRProperty} parameters, which an ALE client set using the \texttt{properties} parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API for the connector namespace. This ALE implementation interprets these parameters as follows:
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.37\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.63\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 2
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{Connector.ConnectionType}&A string that refers to the type of connection used by the ''Connector'' unit to interact with the physical reader (i.e. TCP).\\
+\hline
+\texttt{Connector.Host}&(Optional) A string that refers to the DNS name or IP address of the physical reader.\\
+\hline
+\texttt{Connector.Port}&(Optional) An unsigned integer that refers to the TCP or COMM port of the physical reader.\\
+\hline
+\texttt{Connector.DeviceID}&(Optional) An unsigned integer that refers to the device ID of the physical reader for USB connection. If \texttt{Connector.DeviceID} property is zero the connector will select randomly one available USB reader.\\
+\hline
+\texttt{Connector.Timeout}&(Optional) A timespan, in milliseconds that governs the timespan after which no response from a physical reader results in a timeout. Note that a too-small value for \texttt{Connector.Timeout} including zero value will cause the ''Connector'' to achieve the timeout condition immediately.\\
+\hline
+\end {tabular}
+\caption{Connector Namespace Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\paragraph{ConnectionType}
+\texttt{ConnectionType} is an enumerated property denoting what type of connections is used for communication with a physical reader.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$\texttt{Enumerated Type}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ConnectionType}}\\
+\texttt{TCP   //Indicates a communication via network using TCP protocol}\\
+\texttt{USB   //Indicates a communication via USB port}\\
+\texttt{COMM //Indicates a communication via COMM port}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+
+\begin{itemize}
+\item 	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true and any property of the connector namespace is specified.
+\item 	If the \texttt{Connector.ConnectionType} property is null, omitted or has a value that is not known to the implementation.
+\item	If the value of \texttt{Connector.ConnectionType} property is TCP and both
+\texttt{Connector.Host} and \texttt{Connector.IP} property are omitted or\ifpdf\\ \fi
+\texttt{Connector.Port} property is omitted. 
+\item	If the value of\texttt{ Connector.ConnectionType} property is USB and \ifpdf\\\fi
+\texttt{Connector.DeviceID} property is omitted.
+\item If the value of \texttt{Connector.ConnectionType} property is COMM and \ifpdf\\\fi
+\texttt{Connector.Port} is omitted.
+\item If the value of \texttt{Connector.Host} property is a non-null string that is not valid DNS name nor parseable as an IP-Address of the form\newline [1-255].[1-255].[1-255].[1-255].
+\item If the value of \texttt{Connector.IP} property is a non-null string that is not parseable as an IP-Address of the form\newline [1-255].[1-255].[1-255].[1-255].
+\item If the value of \texttt{Connector.Port} property is a non-null string that is not parseable as a non-negative decimal numeral.
+\item If the value of \texttt{Connector.Timeout} property is a non-null string that is not parseable as a non-negative decimal numeral.
+\end{itemize}
+
+Besides the default properties within the connector namespace each ''Connector'' implementation can define a set with additional properties in the connector namespace that are only interpret by this specific ''Connector''. The following sub section will describe these additional properties for the given reader connector implementations.
+
+\paragraph{LLRP Connector}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides support for physical readers that support the Low Level Reader Protocol (LLRP) for the communication between clients and the reader. The ALE implementation provides an LLRP connector implementation to handle the communication between the ALE and these readers based on LLRP. This connector type can be initialized, with the \texttt{LRProperty} parameter \texttt{ReaderType} with the value \texttt{LLRP}, using the \texttt{properties} parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API.
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{LLRP Type}}&
+\multicolumn{1}{c|}{\vtop{\hbox{\strut\textbf{\texttt{ReaderType}}}\hbox{\strut \textbf{Property Value}}}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{LLRP}&''LLRP''&Operate on a physical reader of type LLRP within the Host mode.\\
+\ifincludefx
+\hline
+\texttt{FX7400}&''FX7400''&Operate on a physical reader of type FX7400 within the Host mode.\\
+\hline
+\texttt{FX9500}&''FX9500''&Operate on a physical reader of type FX9500 within the Host mode.\\
+\fi
+\hline
+\end {tabularx}
+\caption{LLRP Connector Types}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The LLRP Connector recognizes an additional set of \texttt{LRProperty} parameters within the connector namespace, and interprets these parameters as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{Connector.Keepalive}&(Optional) A timespan, in milliseconds that governs the timespan after which no communication between the physical reader and the connector will cause the connector to send a keepalive message. Note the default value for \texttt{Connector.Keepalive} is 30000 milliseconds.\\
+\hline
+\texttt{Connector.InventoryAttempts}&(Optional) An unsigned integer that specifies the amount of inventories that are performed to acquire a specific tag to execute operation\ifincludecc , defined through CC, \fi on. Note the default value for \texttt{Connector.InventoryAttempts} is 3.\\
+\hline
+\end{tabularx}
+\caption {LLRP Connector Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\paragraph{RF-R Connector}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides support for all physical readers of the type HARTING RF-R. The ALE implementation provides connector implementations to handle the communication between the ALE and all supported RF-R readers. These connector types can be initialized according to the following table, using the properties parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API.
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{RF-R Type}}&
+\multicolumn{1}{c|}{\vtop{\hbox{\strut\textbf{\texttt{ReaderType}}}\hbox{\strut \textbf{Property Value}}}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\ifincluderfrtwohundred
+\hline
+\texttt{RF-R200}&''RF-R200''&Operate on a physical reader of type RF-R200 within the Host mode.\\
+\fi
+\hline
+\texttt{RF-R500}&''RF-R500''&Operate on a physical reader of type RF-R500 within the Host mode.\\
+\hline
+\end {tabularx}
+\caption{RF-R Connector Types}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The RF-R Connector recognizes an additional set of \texttt{LRProperty} parameters within the connector namespace, and interprets these parameters as follows: 
+
+\begin{table}[!h]
+\begin{tabular}{
+|p{\dimexpr.43\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.57\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{Connector.Inventory.Antennas}&(Optional) A byte value that specifies which antenna ports are used for inventory attempts for this physical reader.
+\newline
+Value = 1 	$ \boldsymbol{\rightarrow}$ Antenna No 1 \newline
+Value = 2	$ \boldsymbol{\rightarrow}$ Antenna No 2\newline
+Value = 4	$ \boldsymbol{\rightarrow}$ Antenna No 3\newline
+Value = 8	$ \boldsymbol{\rightarrow}$ Antenna No 4\newline
+Also every combination of these values by addition of single values is possible. For example:\newline
+Value = 9	$ \boldsymbol{\rightarrow}$ Antenna No 1, 4\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+|p{\dimexpr.43\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.57\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{Connector.InventoryAttempts}&(Optional) An unsigned integer that specifies the amount of inventories that are performed to acquire a specific tag to execute operation\ifincludecc , defined through CC, \fi on. Note the default value for \texttt{Connector.InventoryAttempts} is 3.\\
+\hline
+\texttt{Connector.TagsInField}&(Optional) An unsigned integer that specifies the maximum quantity of tags within the reader field at the same time. Note the default value for \texttt{Connector.TagsInField} is 128.\\
+\hline
+\texttt{Connector.BlockSize}&(Optional) An unsigned integer that specifies the byte size of a block within a tag. Note the default value for \texttt{Connector.BlockSize} is 2.\\
+\hline
+\texttt{Connector.BlockCount}&(Optional) An unsigned integer that specifies the number of blocks within a tag. Note the default value for \texttt{Connector.BlockCount} is 256.\\
+\hline
+\texttt{Connector.ReaderErrorCount}&(Optional) An unsigned integer that specifies the amount of inventories without reader error before the error is logged again. Note the default value for \texttt{Connector.ReaderErrorCount} is 3.\\
+\hline
+\texttt{Connector.MaxNoOfDataBlocks\newline Read}&(Optional) An unsigned integer that specifies the maximum number of blocks that will be read during an inventory at once. Note the default value for \texttt{Connector.MaxNoOfDataBlocksRead} is 128.\\
+\hline
+\texttt{Connector.IsoErrorCount}&(Optional) An unsigned integer that specifies the amount of inventories without iso error before the error is logged again. Note the default value for \texttt{Connector.IsoErrorCount} is 3.\\
+\hline
+\texttt{Connector.AntennaErrorCount}&(Optional) An unsigned integer that specifies the amount of inventories without antenna error before the error is logged again. Note the default value for \texttt{Connector.AntennaErrorCount} is 3.\\
+\hline
+\end {tabular}
+\caption{RF-R500 Connector Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\paragraph{Built-In Connector} \label{par:builtin}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides support for the built-in reader of the RFID Reader RF-R350. The ALE implementation provides a connector implementation to handle the communication between the ALE and the built-in reader. The ALE automatically detects the built-in reader and predefines the necessary \texttt{LRSpec} with the name \texttt{BuiltIn}. Both \texttt{getLogicalReaderNames} and \texttt{getLRSpec} will include the built-in reader.
+
+The Built-In Connector currently supports no \texttt{LRProperty} parameters.
+
+
+\subsubsection{Reader Namespace}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation recognizes a set of \texttt{LRProperty} parameters, which an ALE client set using the \texttt{properties} parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API for the reader namespace.
+
+Properties within the reader namespace are ''Reader'' specific properties. Therefore each ''Reader'' type defines its own set of properties recognized within the reader namespace. These properties are used to configure the physical reader, each connector provides all configuration properties that are supported by the physical reader the specific connector was implemented for.
+
+\ifincluderc
+A complete set of the properties within the reader namespace could be obtained by a client using the Reader Configuration API (see section \ref{subsec:ALEReader}).
+\fi
+
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+
+\begin{itemize}
+\item	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true and any property of the reader namespace is specified.
+\item	If the value of any property is a non-null string that is not parseable into the expected type.
+\end{itemize}
+
+\subsection{Tag Smoothing}
+\label{subsec:TagSmoothing}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation does fully support tag smoothing as specified in section 10.6 of the ALE specification document for EC\ifincludecc , CC \fi and the PC API. Therefore this ALE implementation will not raise a \texttt{ValidationException} when a client sets the tag smoothing properties.
+
+\subsection{Antenna Restriction}
+\label{subsec:Antenna}
+Antenna restriction is a mechanism whereby a composite reader can be configured to use only a single antenna from a single base reader within its readers list to acquire tags. Thereby a logical reader will consider at any point in time a tag to be within view if the tag was read on the specified antenna of the base reader. Only the acquiring of tags underlies these restriction, consequently after a command cycle acquired a matching tag it will operated on this tag regardless which antenna the physical reader uses to execute the operation. Antenna restriction is based upon one parameter, which an ALE client set using the \texttt{properties} parameter of an \texttt{LRSpec} or the \texttt{setProperties} method of the Logical Reader API, as specified in section 10.3 of the ALE specification document. This ALE implementation interprets this parameter as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|R|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Property Name}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{AntennaID}&An unsigned integer that specifies the id if the antenna to use for acquiring tags through the logical reader. If a tag is in view of the specified antenna of its reader within the readers list, the logical reader will forward this tag to its observers (event cycle, command cycle, port cycle or another composite reader). Note that an \texttt{AntennaID} of \emph{zero} or greater value than the number of antennas of the physical reader will result in the behavior that the reader will never forward a tag because no tag will ever match the requirements set by \texttt{AntennaID.}\\
+\hline
+\end {tabularx}
+\caption{Antenna Restriction Properties}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+If the property is set to null for a given logical reader the implementation will not use antenna restriction for that logical reader.
+The \texttt{define, update} and \texttt{setProperties} methods of the Logical Reader API will raise a \texttt{ValidationException} under any of the following circumstances:
+
+\begin{itemize}
+\item	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is false and the \ifpdf\newline\fi\texttt{AntennaID} property is specified.
+\item	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true, the \texttt{AntennaID} property is specified and the reader list contains more than one base reader.
+\item	If the \texttt{isComposite} parameter within the \texttt{LRSpec} is true, the \texttt{AntennaID} property is specified and the \texttt{readers} list contains a composite reader.
+\item	If the value of the \texttt{AntennaID} property is a non-null string that is not parseable as a non-negative decimal integer numeral.
+\end{itemize}
+
+\section{Access Control API}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation does not support the ALE Access Control API specified in section 11 of the ALE specification document.
+
+\section{ALE Digital Input and Output API}
+\label{subsec:ALEdigi}
+This section defines normatively the ALE Digital Input and Output API. The external interface is defined by the ALEPC interface (Section \ref{subsec:ALEPCM}). 
+This interface makes use of a number of complex data types that are documented in the sections following section \ref{subsec:ALEPCM}. The specification of the Digital Input and Output API follows the general rules given in Section 4 of the ALE specification document.
+
+Through the ALEPC interface defined in section \ref{subsec:ALEPCM}, clients may define and manage port cycle specification (PCSpecs), operate upon ports on-demand by activating PCSpecs synchronously, and enter standing request (subscriptions) for PCSpecs to be activated asynchronously. Results from standing requests are delivered through the \texttt{ALEPCCallback} interface, specified in section \ref{subsec:ALEPCCallback}.
+
+\subsection{ALEPC - Main API Class}
+\label{subsec:ALEPCM}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$\texttt{interface}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ALEPC}}\\
+\texttt{\textendash \textendash \textendash}\\
+\texttt{define(specName : String, spec : PCSpec) : void}\\
+\texttt{undefine(specName : String) : void}\\
+\texttt{getPCSpec(specName : String) : PCSpec}\\
+\texttt{getPCSpecNames() : List<String>}\\
+\texttt{subscribe(specName : String, notificationURI : String) : void}\\
+\texttt{unsubscribe(specName : String, notificationURI : String) : void}\\
+\texttt{poll(specName : String) : PCReports}\\
+\texttt{immediate(spec : PCSpec) : PCReports}\\
+\texttt{getSubscribers(specName : String) : List<String>}\\
+\texttt{execute(specs :PCOpSpecs) :PCOpReports}\\
+\texttt{getStandardVersion() : String}\\
+\texttt{getVendorVersion() : String}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation implements the methods of the ALE Digital Input and Output API as specified in the following table:
+
+
+\ifpdf
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.24\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.16\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.45\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Method}}&\textbf{Argument \newline/Result}&\multicolumn{1}{c|}{\textbf{Type}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{define}&\texttt{specname}&\texttt{String}&\multirow{3}{190pt}{Creates a new PCSpec having the name \texttt{specName}, according to \texttt{spec}.}\\
+\cline{2-3}&\texttt{spec}&\texttt{PCSpec}&\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{Void}&\\
+\hline
+
+\texttt{undefine}&\texttt{specname}&\texttt{String}&\multirow{3}{190pt}{Removes the PCSpec named \texttt{specName} that was previously created by the \texttt{define} method.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{Void}&\\
+&&&\\
+\hline
+\texttt{getPCSpec}&\texttt{specname}&\texttt{String}&\multirow{3}{200pt}{Returns the \texttt{PCSpec} that was provided when PCSpec named \texttt{specName} was created by the \texttt{define} method.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{PCSpec}&\\
+&&&\\
+
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.24\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.16\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.45\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+
+\texttt{getPCSpecNames}&\textbf{\texttt{[result]}}&\texttt{List}\newline\texttt{<String>}&Returns an unordered list of the names of all PCSpec that are visible to the caller.\\
+
+\hline
+\texttt{subscribe}&\texttt{specname}&\texttt{String}&\multirow{6}{175pt}{Adds a subscriber having the specified \texttt{notificationURI} to the set of current subscribers of the PCSpec named \texttt{specName}. The \texttt{notificationURI} parameter both identifies a specific binding of the \texttt{ALEPCCallback} interface and specifies addressing information meaningful to that binding.}\\
+\cline{2-3}&\texttt{notifi-}\newline \texttt{cationURI}&\texttt{String}&\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{Void}&\\
+&&&\\
+&&&\\
+&&&\\
+&&&\\
+
+\hline
+\texttt{unsubscribe}&\texttt{specname}&\texttt{String}&\multirow{3}{168pt}{Removes a subscriber having the specified\\ \texttt{notificationURI} from the set of current subscribers of the PCSpec named \texttt{specName}.}\\
+\cline{2-3}&\texttt{notifi-} \newline\texttt{cationURI}&\texttt{String}&\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{Void}&\\
+
+\hline
+
+
+\texttt{poll}&\texttt{specname}&\texttt{String}&\multirow{3}{175pt}{Request an activation of the PCSpec named \texttt{specName}, returning the results form the next port cycle to complete.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{PCReports}&\\
+&&&\\
+
+\hline
+\texttt{immediate}&\texttt{spec}&\texttt{PCSpec}&\multirow{3}{175pt}{Creates an unnamed PCSpec according to \texttt{spec}, and immediately requests its activation.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{PCReports}&\\
+&&&\\
+
+\hline
+\texttt{getSubscribers}&\texttt{specName}&\texttt{String}&\multirow{5}{170pt}{Returns an unordered, possibly empty list of the notification URIs corresponding to each of the current subscribers for the PCSpec named \texttt{specName}.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{List}\newline\texttt{<String>}&\\
+&&&\\
+&&&\\
+
+\hline
+\texttt{execute}&\texttt{specs}&\texttt{PCOpSpecs}&\multirow{3}{170pt}{Executes a list of PCOpSpec according to specs, and returning the corresponding list of PCOpReport.}\\
+\cline{2-3}&\textbf{\texttt{[result]}}&\texttt{PCOpReports}&\\
+&&&\\
+
+\hline
+\texttt{getStandardVersion}&\textbf{\texttt{[result]}}&\texttt{String}&Returns a string that identifies what version of the specification this implementation of the Digital Input and Output API complies with.\\
+\hline
+\texttt{getVendorVersion}&\textbf{\texttt{[result]}}&\texttt{String}&Returns a string that identifies what vendor extensions this implementation of the Digital Input and Output API provides.\\
+\hline
+\end{tabular}
+\caption{ALEPC Interface Methods}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\else
+\begin{table}
+\HCode{
+ <table class='tabular'> <tr> <td  style="text-align:center;"><b>Method</b></td> <td  style="text-align:center;"><b>Argument/Result</b></td> <td  style="text-align:center;"><b>Type</b></td> <td  style="text-align:center;"><b>Description</b></td> </tr> <tr> <td rowspan="3"><span class='courier'>define</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="3">Creates a new PCSpec having the name <span class='courier'>specName</span>, according to <span class='courier'>spec</span>. </td> </tr> <tr> <td><span class='courier'>spec</span></td> <td><span class='courier'>PCSpec</span></td> </tr> <tr> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>Void</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>undefine</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="2">Removes the PCSpec named <span class='courier'>specName</span> that was previously created by the <span class='courier'>define</span> method. </td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>PCSpec</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>getPCSpec</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="2">Returns the <span class='courier'>PCSpec</span> that was provided when PCSpec named <span class='courier'>specName</span> was created by the <span class='courier'>define</span> method. </td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>PCSpec</span></td> </tr> <tr> <td><span class='courier'>getPCSpecName</span></td> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>List&lt;String&gt;</span></td> <td>Returns an unordered list of the names of all PCSpec that are visible to the caller. </td> </tr> <tr> <td rowspan="3"><span class='courier'>subscribe</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="3">Adds a subscriber having the specified <span class='courier'>notificationURI</span> to the set of current subscribers of the PCSpec named <span class='courier'>specName</span>. The <span class='courier'>notificationURI</span> parameter both identifies a specific binding of the <span class='courier'>ALEPCCallback</span> interface and specifies addressing information meaningful to that binding. </td> </tr> <tr> <td><span class='courier'>notificationURI</span></td> <td><span class='courier'>String</span></td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td>Void</td> </tr> <tr> <td rowspan="3"><span class='courier'>unsubscribe</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="3">Removes a subscriber having the specified <span class='courier'>notificationURI</span> from the set of current subscribers of the PCSpec named <span class='courier'>specName</span>. </td> </tr> <tr> <td><span class='courier'>notificationURI</span></td> <td><span class='courier'>String</span></td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>Void</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>poll</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="2">Request an activation of the PCSpec named <span class='courier'>specName</span>, returning the results form the next port cycle to complete. </td> </tr> <tr> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>PCReports</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>imediate</span></td> <td><span class='courier'>spec</span></td> <td><span class='courier'>PCSpec</span></td> <td rowspan="2">Creates an unnamed PCSpec according to <span class='courier'>spec</span>, and immediately requests its activation. </td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>PCReports</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>getSubscribers</span></td> <td><span class='courier'>specname</span></td> <td><span class='courier'>String</span></td> <td rowspan="2">Returns an unordered, possibly empty list of the notification URIs corresponding to each of the current subscribers for the PCSpec named <span class='courier'>specName.</span> </td> </tr> <tr> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>List&lt;String&gt;</span></td> </tr> <tr> <td rowspan="2"><span class='courier'>execute</span></td> <td><span class='courier'>specs</span></td> <td><span class='courier'>PCOpSpecs</span></td> <td rowspan="2">Executes a list of PCOpSpec according to specs, and returning the corresponding list of PCOpReport. </td> </tr> <tr> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>PCOpReports</span></td> </tr> <tr> <td><span class='courier'>getStandardVersion</span></td> <td ><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>String</span></td> <td>Returns a string that identifies what version of the specification this implementation of the Digital Input and Output API complies with. </td> </tr> <tr> <td><span class='courier'>getVendorVersion</span></td> <td ><span class='courier'><b>[result]</b></span></td> <td>String</td> <td>Returns a string that identifies what vendor extensions this implementation of the Digital Input and Output API provides. </td> </tr> <tr></tr></table>}
+\caption{ALEPC Interface Methods}
+\end{table}
+\fi
+
+The primary data type associated with the ALE Digital Input and Output API are the \texttt{PCSpec}, which specifies how a port cycle is to be carried out, and the\texttt{ PCReports}, which contains one or more reports generated from one activation of a \texttt{PCSpec}. \\
+\texttt{PCReports} instance are both returned from the \texttt{poll} and the \texttt{immediate} methods, and also sent to subscribers when \texttt{PCSpecs} are subscribed to using the \texttt{subscribe} method. The next two sections, Section \ref{subsec:PCSpec} and Section \ref{subsec:PCReports}, specify the \texttt{PCSpec} and \texttt{PCReports} data types in full detail.
+
+\subsubsection{Error Conditions}
+Methods of the ALE Digital Input and Output API signal error conditions to the client by means of exceptions. The following exceptions are defined. All the exception types in the following table are extensions of a common \texttt{ALEException} base type, which contains one string element giving the reason for the exception.
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.40\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.60\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Exception Name}}&\multicolumn{1}{c|}{\textbf{Meaning}}\\
+\hline
+\texttt{SecurityException}&The operation was not permitted due to an access control violation or other security concern. \\
+\hline
+\texttt{DuplicateNameException}&The specified PCSpec name already exists. \\
+\hline
+\texttt{PCSpecValidationException}&The specified PCSpec is invalid. The complete list of rules for generating this exception is specified in Section 4.2.14.\\
+\hline
+\texttt{InvalidURIException}&The URI specified for a subscriber does not conform to URI syntax as specified in [RFC2396], does not name a binding of the \texttt{ALEPCCallback} interface recognized by the implementation, or violates syntax or other rules imposed by a particular binding.\\
+\hline
+\texttt{NoSuchNameException}&The specified PSSpec name does not exist.\\
+\hline
+\texttt{NoSuchSubscriberException}&The specified subscriber does not exist.\\
+\hline
+\texttt{DuplicateSubscriber\newline Exception}&The specified PCSpec name and subscriber URI is identical to a previous subscription that was created and not yet unsubscribed.\\
+\hline
+\texttt{ImplementationException}&A generic exception raised by the implementation for reasons that are implementation-specific. This exception contains one additional element: a \texttt{severity} member whose values are either \texttt{ERROR} or \texttt{SEVERE. ERROR} indicates that the ALE implementation is left in the same state it had before the operation was attempted. \texttt{SEVERE} indicates that the ALE implementation is left in an indeterminate state.\\
+\hline
+\end{tabular}
+\caption{Exceptions in the ALEPC Interface}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The exceptions that may be raised by each ALE method are indicated in the table below. This ALE implementation raises the appropriate exception listed below when the corresponding condition described above occurs. If more than one exception condition applies to a given method call, the implementation may raise any of the exceptions that applies.
+
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.5\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.5\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{ALE Method}}&\multicolumn{1}{c|}{\textbf{Exceptions}}\\
+\hline
+\texttt{define}&\texttt{DuplicateNameException\newline PCSpecValidationException\newline SecurityException \newline ImplementationException}\\
+\hline
+\texttt{undefine}&\texttt{NoSuchNameException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{getPCSpec}&\texttt{NoSuchNameException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{getECSpecNames}&\texttt{SecurityException\newline ImplementationException}\\
+\hline
+\texttt{subscribe}&\texttt{NoSuchNameException\newline InvalidURIException\newline DuplicateSubscriberException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{unsubscribe}&\texttt{NoSuchNameException\newline NoSuchSubscriberException\newline InvalidURIException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{poll}&\texttt{NoSuchNameException \newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{immediate}&\texttt{PCSpecValidationException \newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{getSubscribers}&\texttt{NoSuchNameException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{execute}&\texttt{PCSpecValidationException\newline SecurityException\newline ImplementationException}\\
+\hline
+\texttt{getStandardVersion}&\texttt{ImplementationException}\\
+\hline
+\texttt{getVendorVersion}&\texttt{ImplementationException}\\
+\hline
+\end{tabular}
+\caption {Exceptions Raised by each ALEPC Interface Method}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{PCSpec}
+\label{subsec:PCSpec}
+A \texttt{PCSpec} is a complex type that describes a port cycle. A port cycle is an interval of time during which ports are operated upon.
+
+A \texttt{PCSpec} contains 
+\begin{enumerate}[(a)]
+\item one or more logical reader names; 
+\item a boundary specification (\texttt{PCBoundarySpec}) that identifies an interval of time; 
+\item one or more reports specification (\texttt{PCReportSpec}) that specify operations to be performed on ports of any specified logical readers during the specified interval of time. 
+\end{enumerate}
+The report specification also implies what information is included in a report generated from each port cycle generated from this \texttt{PCSpec.}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCSpec}}\\
+\texttt{logicalReader : List<String> }\\
+\texttt{boundarySpec : PCBoundarySpec}\\
+\texttt{reportSpecs : List<PCReportSpec>}\\
+\texttt{includeSpecInReports : Boolean}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCSpec} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+|p{\dimexpr.31\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.22\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.47\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{logicalReader} &\texttt{List<String>}& An unordered list that specifies one or more logical readers that are used to receive tag events that causes port operations to be processed. \\ \hline 
+\texttt{boundarySpec} &\texttt{PCBoundarySpec} & Specifies the starting and stopping conditions for port cycles. See Section \ref{subsec:PCBound} \\ \hline 
+\texttt{reportSpecs} &\texttt{List}\newline\texttt{<PCReportSpec>} & An ordered list that specifies one or more reports with sequences of operations to apply to ports. See Section \ref{subsec: PCRep} \\ \hline 
+\texttt{includeSpecInReports} &\texttt{Boolean} & If true, specifies that each \texttt{PCReports} instance generated from this \texttt{PCSpec} includes a copy of the \texttt{PCSpec}. If false, each \texttt{PCReports} instance not includes a copy of the \texttt{PCSpec}. \\ \hline 
+\end{tabular}
+\caption{PCSpec Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define} and immediate methods raise a \texttt{PCSpecValidationException} if any of the following are true for a \texttt{PCSpec} instance:
+
+\begin{itemize}
+\item	The \texttt{logicalReaders} parameter contains any logical reader names that are not known to the implementation.
+\item	The \texttt{boundarySpec} parameter is null or omitted, or the specified\ifpdf\\\fi \texttt{boundarySpec} leads to a \texttt{PCSpecValidationException} as specified in Section \ref{subsec:PCBound}
+\item	The \texttt{reportSpecs} parameter is null, omitted, empty, or any of the members of \texttt{reportSpecs} leads to a \texttt{PCSpecValidationException} as specified in Section \ref{subsec: PCRep}
+\end{itemize}
+
+\subsubsection{PCBoundarySpec}
+\label{subsec:PCBound}
+A \texttt{PCBoundarySpec} specifies how the beginning and end of port cycles are to be determined.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCBoundarySpec}}\\
+\texttt{startTriggerList : List<ECTrigger>  }\\
+\texttt{repeatPeriod : ECTime}\\
+\texttt{stopTriggerList : List<ECTrigger>}\\
+\texttt{duration : ECTime}\\
+\texttt{noNewEventsInterval : ECTime}\\
+\texttt{whenDataAvailable : Boolean}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCBoundarySpec} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+|p{\dimexpr.30\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.23\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+|p{\dimexpr.47\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&\multicolumn{1}{c|}{\textbf{Type}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{startTriggerList} &\texttt{List<ECTrigger>}& (Optional) An unordered list that specifies zero or more triggers that may start a new port cycle for this \texttt{PCSpec.} \\ \hline 
+\texttt{repeatPeriod} &\texttt{ECTime} &(Optional) Specifies an interval of time for starting a new port cycle for this \texttt{PCSpec}, relative to the start of the previous port cycle.\\ \hline
+\texttt{stopTriggerList} &\texttt{List<ECTrigger>} & (Optional) An unordered list that specifies zero or more triggers that may stop a port cycle for this \texttt{PCSpec}.\\ \hline
+\ifpdf
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+|p{\dimexpr.30\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.23\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.47\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\fi 
+\texttt{Duration} &\texttt{ECTime} &(Optional) Specifies an interval of time for stopping a port cycle for this \texttt{PCSpec}, relative to the start of the port cycle.If omitted or equal to zero, has no effect on the stopping of the port cycle.\\ \hline 
+\texttt{noNewEventsInterval}&\texttt{ECTime}&(Optional) Specifies that a port cycle be stopped if no new events are raised within the specified interval.\newline If omitted or equal to zero, has no effect on the stopping of the port cycle.\\ \hline
+\texttt{whenDataAvailable}&\texttt{Boolean}&(Optional) If true, specifies that a port cycle be stopped when any event raises that matches the conditions, filter or trigger, of at least one \texttt{PCReportSpec} within this \texttt{PCSpec.}\newline If omitted or false, has no effect on the stopping of the port cycle.\\ \hline
+\end{tabular}
+\caption {PCBoundarySpec Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define} and \texttt{immediate} methods raise a \texttt{PCSpecValidationException} if any of the following are true for a \texttt{PCBoundarySpec} instance:
+\begin{itemize}
+\item	A negative number is specified for any of the \texttt{ECTime} values \texttt{duration},\ifpdf\\\fi
+\texttt{repeatPeriod}, and \texttt{noNewEventsInterval}.
+\item	Any element of \texttt{startTriggerList} or \texttt{stopTriggerList} does not conform to URI syntax as defined by   [RFC2396], or is a URI that is not supported by the ALE implementation. Note that an empty string does not conform to URI syntax as defined by [RFC2396].
+\item	No stopping condition is specified: i.e., \texttt{stopTriggerList} is empty, \texttt{duration} is zero or omitted, \texttt{noNewEventsInterval} is zero or omitted and \texttt{whenDataAvailable} is false.
+\end{itemize}
+In the description below, the phrase ''if specified'' used in reference to \texttt{repeatPeriod, duration} or \texttt{noNewEventsInterval} means that the parameter is specified and is positive (non-zero) number.\\
+The \texttt{boundarySpec} parameter of \texttt{PCSpec} (of type \texttt{PCBoundarySpec}) specifies starting and stopping conditions as referred to in the \texttt{PCSpec} lifecycle specified in Section \ref{subsec:Execution}.\\ Within that description, ''arrival of a start trigger'' means that the ALE implementation receives any of the triggers specified in the \texttt{startTriggerList} for this \texttt{PCSpec}, and ''repeat period'' means the value if the \texttt{repeatPeriod} parameter, if specified. The phrase ''a stopping condition occurred'' means the first of the following to occur:
+
+\begin{itemize}
+\item	The \texttt{duration}, when specified, expires (measured from the start of the port cycle).
+\item	When the \texttt{noNewEventsInterval} is specified, no new Events are raised by any reader for the specified interval.
+\item	Any one of the stop triggers specified in the \texttt{stopTriggerList} received.
+\item	The \texttt{whenDataAvailable} parameter is true, and any event occurred that matches the filter or trigger condition of at least one \texttt{PCReportSpec} within this \texttt{PCSpec}. If several matching events are raised in a single reader cycle, the implementation terminate the port cycle after receiving all of those events.
+\end {itemize}
+
+\subsubsection{ECTime}
+See section 8.2.2 of the ALE specification document.
+
+\subsubsection{PCReportSpec}
+\label{subsec: PCRep}
+A \texttt{PCReportSpec} includes (a) a filter specification (\texttt{PCFilterSpec}) that has inclusive/exclusive filters to select an amount of tags; (b) a trigger list that defines a list of triggers (\texttt{ECTrigger}); (c) an ordered list of one or more operation specifications (\texttt{PCOpSpec}), each of which describes a single operation to be performed on a port. During a port cycle, the ALE implementation attempts to carry out the commands specified by the operation specifications on the specified ports.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCReportSpec}}\\
+\texttt{name : String }\\
+\texttt{filterSpec : PCFilterSpec}\\
+\texttt{triggerList: List<ECTrigger>}\\
+\texttt{opSpecs : List<PCOpSpec>}\\
+\texttt{reportIfEmpty : Boolean}\\
+\texttt{statProfileNames : List<PCStatProfileName>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCReportSpec} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.25\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.29\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.46\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{name} &\texttt{String}&Specifies a name for reports generated from this \texttt{PCReportSpec}. The ALE implementation copies this name into the \texttt{PCReport} instance generated from this \texttt{PCReportSpec}. \\ \hline
+\texttt{filterSpec} &\texttt{PCFilterSpec}&Specifies how tags are filtered before the event to cause the operations to be processed is raised as specified in Section \ref{subsec: PCFilter} \\ \hline
+\ifpdf
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.25\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.29\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.46\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\fi 
+\texttt{triggerList} &\texttt{List<ECTrigger>}&Specifies the trigger that can cause the operations to be processed, as specified in Section \ref{subsec:ECTrig}. \\ \hline 
+\texttt{opSpecs} &\texttt{List<PCOpSpec>}&An ordered list of \texttt{PCOpSpec} instances, each specifying an operation to be carried out on a port, as specified in Section \ref{subsec: PCOpS}. This ALE implementation will process each event that matches \texttt{filterSpec} or \texttt{triggerList} acquired during a port cycle. \\ \hline 
+\texttt{reportIfEmpty} &\texttt{Boolean}&Specifies whether to omit the \texttt{PCReport} instance if the final set of ports is empty, as specified below.\\ \hline 
+\texttt{statProfileNames} &\texttt{List}\newline\texttt{<PCStatProfileName>}&An ordered list that specifies zero or more statistics profiles that govern what statistics are to be included in the report, as specified in Section \ref{subsec: PCStat}.  \\ \hline 
+\end{tabular}
+\caption{PCReportSpec Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define} and \texttt{immediate} methods raise a \texttt{PCSpecValidationException} if any of the following are true for a \texttt{PCReportSpec} instance:
+\begin{itemize}
+\item	The specified name is an empty string or is not accepted by the implementation according to Section 4.5 of the ALE specification document.
+\item	The specified name is a duplicate of another report \texttt{name} in the same \texttt{PCSpec}.
+\item	The specified \texttt{filterSpec} leads to a \texttt{PCSpecValidationException} as specified in Section \ref{subsec: PCFilter}.
+\item	The value of any element of \texttt{triggerList} does not conform to URI syntax as defined by [RFC2396], or is a URI that is not supported by the ALE implementation. Note that an empty string does not conform to URI syntax as defined by [RFC2396].
+\item	Both \texttt{filterSpec} and \texttt{triggerList} are specified for the same \ifpdf\\\fi
+\texttt{PCReportSpec}.
+\item	The \texttt{logicalReaders} parameter of \texttt{PCSpec} is null, omitted or an empty list and \texttt{triggerList} is not specified.
+\item	Any element of \texttt{opSpecs} leads to a \texttt{PCSpecValidationException} as specified in Section \ref{subsec: PCOpS}.
+\item	Any element of \texttt{statProfileNames} is not the name of a known statistic profile.
+\item	If \texttt{triggerList} is specified and any element of \texttt{statProfileNames} refers to a tag statistic which is not evaluable by a trigger event.
+\end{itemize}
+\bigskip
+\begin {code}
+\emph{Note if both} \texttt{filter} \emph{and} \texttt{trigger} \emph{are not specified for a report this is equivalent to an empty filter list where every tag event will match the filter conditions. An empty list will be interpreted by the ALE implementation as not specified.}
+\end{code}
+
+A \texttt{PCReports} instance includes a \texttt{PCReport} instance corresponding to each\ifpdf\\\fi
+ \texttt{PCReportSpec} in the governing \texttt{PCSpec}, in the same order specified in the \texttt{PCSpec}, except that a \texttt{PCReport} instance is omitted under the following circumstances:
+\begin{itemize}
+\item	If a \texttt{PCReportSpec} has \texttt{reportIfEmpty} set to false, then the corresponding \texttt{PCReport} instance is omitted from the \texttt{PCReports} for this port cycle if the final, filtered set of events is empty.
+\end{itemize}
+
+When the processing of \texttt{reportIfEmpty} results in \emph{all} \texttt{PCReport} instances being omitted from the \texttt{PCReports} for a port cycle, then the delivery of the results to subscribers is suppressed altogether. That is, a result consisting of a \texttt{PCReports} having zero contained \texttt{PCReport} instances is not sent to a subscriber. This rule only applies to subscribers, a \texttt{PCReports} instance always is returned to the caller of \texttt{immediate} or \texttt{poll} at the end of a port cycle, even if the \texttt{PCReports} instance contains zero \texttt{PCReport} instances.
+
+The \texttt{statProfileName} parameter is a list of \texttt{PCStatProfileName}, each of which corresponds to a statistics profile that will be included in the\ifpdf\\\fi
+\texttt{PCReports}. If the ALE engine does not recognize any name in the list or the combination of event set (trigger or tags) and any statistics profile is not evaluable it raises a \texttt{PCSpecValidationException}.
+
+\subsubsection{PCFilterSpec}
+\label{subsec: PCFilter}
+A \texttt{PCFilterSpec} specifies what tags will cause port operations to be processed by a \texttt{PCReportSpec}.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCFilterSpec}}\\
+\texttt{filterList : List$<$ECFilterListMember$>$}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCFilterSpec} as follows.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{filterList} &\texttt{List $<$ECFilterListMember$>$}&Specifies an unordered list of filters, as specified below. \\ 
+\hline 
+\end{tabularx}
+\caption{PCFilterSpec Fields}
+\MakeLineNo
+\end{table}
+
+The \texttt{define} and \texttt{immediate} methods will raise a \ifpdf\\\fi\texttt{PCSpecValidationException} if any of the following are true for a \ifpdf\\\fi\texttt{PCFilterSpec}:
+\begin{itemize}
+\item	Any element of \texttt{filterList} is leads to a \texttt{PCSpecValidationException} as specified in Section 8.2.8 of the ALE specification Document.
+\end{itemize}
+
+The \texttt{PCFilterSpec} implements a flexible filtering scheme based on a list of\ifpdf\\\fi
+ \texttt{ECFilterListMember} instances (\texttt{ECFilterListMember }is shared with the ALE Reading API, and specified in Section 8.2.8 of the ALE specification Document). Each \texttt{ECFilterListMember} instances defines a test to be applied to fields of a tag to determine if the tag should cause port operations according to the containing in \texttt{PCReportSpec} to be processed. A tag raises an event to cause operations specified in the \texttt{PCReportSpec} if it passes the test specified by every \texttt{ECFilterListMember} in \texttt{filterList}, as defined in Section 8.2.7 and 8.2.8 of the ALE specification Document.
+
+If accessing a field specified by any element of \texttt{filterList} causes a ''field not found'' or ''operation not possible'' condition, that tag will not be raise an event for this \texttt{PCReportSpec}.
+
+\subsubsection{PCOpSpec}
+\label{subsec: PCOpS}
+Each \texttt{PCOpSpec} specifies an operation to perform on a port, such as reading a port status or setting a port status.  Each \texttt{PCOpSpec} has on operation type that specifies which operation to perform and a \texttt{portSpec} that indicates which port the operation is processed on. Operations that require input state (such as setting a port status) include the state parameter to specify the input data.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCOpSpec}}\\
+\texttt{opType : PCOpType}\\
+\texttt{portSpec : PCPortSpec}\\
+\texttt{state : Boolean}\\
+\texttt{duration : ECTime}\\
+\texttt{opName  : String}\\
+$<$<$ \texttt{extension point} $>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCOpSpec} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.17\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.68\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&\multicolumn{1}{c|}{\textbf{Type}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{opType} &\texttt{PCOpType}&Specifies the operation to be performed.\\ \hline 
+\texttt{portSpec}&\texttt{PCPortSpec}&Specifies the port to process a port operation on. \\ \hline
+\texttt{State}&\texttt{Boolean}&(Conditional) Specifies the \texttt{state} source as a boolean value. If \texttt{state} is set to true the specified port will be activated. If \texttt{state} is set to false the specified port will be deactivated. If \texttt{opType} specifies an operation that does not require input state, this parameter must be null or omitted. \\ \hline
+\ifpdf
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.17\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.68\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\fi
+\texttt{Duration}&\texttt{ECTime}&(Optional) If \texttt{opType} support \texttt{duration}, like setting a port status, this parameter specifies the \texttt{duration} to set the specified status. If \texttt{duration} is null or omitted the value is interpret as infinite. If \texttt{opType} does not support \texttt{duration} this parameter must be omitted.
+ \\ \hline
+\texttt{opName}&\texttt{String}&(Optional)A name for this operation within in \texttt{PCOpSpec}. If specified, the value is copied into the corresponding \texttt{PCOpReport} instance. If omitted, the \texttt{opName} parameter of the corresponding \texttt{PCOpReport} instance will be omitted as well.  \\ \hline
+\end{tabular}
+\caption{PCOpSpec Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define, immediate} and \texttt{execute} methods raise a\ifpdf\\ \fi
+\texttt{PCSpecValidationException} if any of the following are true for a \texttt{PCOpSpec} instance:
+
+\begin{itemize}
+\item	The specified \texttt{opType} value is not one of the standard \texttt{opType} values specified in section \ref{subsec: PCType}.
+\item	The \texttt{portSpec} parameter is null, omitted or invalid according to section \ref{subsec: PCPortS}.
+\item	The specified \texttt{opType} requires a \texttt{state}, and \texttt{state} is null or omitted.
+\item	The specified \texttt{opType} does not require \texttt{state}, and \texttt{state} is specified.
+\item	The specified \texttt{opType} does not require \texttt{duration}, and \texttt{duration} is specified.
+\item	When \texttt{opName} is specified, the specified \texttt{opName} is the same as an \texttt{opName} of another \texttt{PCOpSpec} within the same \texttt{PCReportSpec} instance or the list use by the \texttt{execute} method.
+\end{itemize}
+
+\subsubsection{PCOpType}
+\label{subsec: PCType}
+\texttt{PCOpType} is an enumerated type denoting what type of operation is represented by the \texttt{PCOpSpec.}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCOpType}}\\
+\texttt{READ}\\
+\texttt{WRITE}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The following table describes each value of \texttt{PCOpType}, and interpretation of \texttt{portSpec} and \texttt{state} within \texttt{PCOpSpec} when that \texttt{PCOpType} value is specified.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|X|R|R|R|R|}
+\hline
+\textbf{PCOpType}\newline\textbf{Value}&\multicolumn{1}{c|}{\textbf{Description}}&\multicolumn{1}{c|}{\texttt{portSpec}}&\multicolumn{1}{c|}{\texttt{state}}&\multicolumn{1}{c|}{\texttt{duration}}\\
+\hline
+\texttt{READ}&Read status from port.&The port to read.&[Must be omitted]&[Must be omitted]\\
+\hline 
+\texttt{WRITE}&Set status of a port.&The port to set.&The value to set for the specified port.&Specifies a timespan to set the port status. If null or omitted sets the status permanently.\\
+\hline
+\end{tabularx}
+\caption{PCOpType Value}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCPortSpec}
+\label{subsec: PCPortS}
+A \texttt{PCPortSpec} defines a port to execute a port operation on:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCPortSpec}}\\
+\texttt{id : int}\\
+\texttt{reader : String}\\
+\texttt{type : PCPortType // INPUT or OUTPUT}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation interprets the fields of a \texttt{PCPortSpec} as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&\multicolumn{1}{c|}{\textbf{Type}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{id} &\texttt{int}&Specifies the port \texttt{id}; that is which port to operate upon.\\ \hline 
+\texttt{Reader} &\texttt{String}&Specifies the logical reader name; that is which \texttt{reader} to operate upon.\\ \hline 
+\texttt{Type} &\texttt{PCPortType}&Specified whether this \texttt{PCPortSpec} specifies an input or output port. If this parameter is INPUT, the spec defines an input port. IF this parameter is OUTPUT, this spec defines an output port.\\ \hline 
+\end{tabularx}
+\caption{PCPortSpec Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The \texttt{define, immediate} and \texttt{execute} methods raise a \ifpdf\\\fi\texttt{PCSpecValidationException} if any of the following are true for a \ifpdf\\\fi\texttt{PCPortSpec}:
+\begin{itemize}
+\item	The \texttt{id} parameter is null, omitted or negative number is specified.
+\item	The \texttt{reader} parameter is null or omitted or is any logical reader name that is not known to the implementation.
+\item	The specified \texttt{type} value is not one of the standard type values specified in Section \ref{subsec: PCPort}.
+\item	The specified \texttt{reader} is any logical reader name that is not a base reader.
+\end{itemize}
+
+\subsubsection{PCPortType}
+\label{subsec: PCPort}
+\texttt{PCPortType} is an enumerated type denoting what type of port is represented by the \texttt{PCPortSpec}.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCPortType}}\\
+\texttt{INPUT}\\
+\texttt{OUTPUT}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+\subsubsection{PCStatProfileName}
+\label{subsec: PCStat}
+Each valid value of \texttt{PCStatProfileName} names as statistics profile that can be included in a \texttt{PCReports}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCStatProfileName}}\\
+\texttt{EventTimestamps}\\
+\texttt{EventCount}\\
+\texttt{ReaderNames}\\
+\texttt{ReaderSightingSignals}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The \texttt{define, immediate} and \texttt{execute} methods raise a \ifpdf\\\fi\texttt{PCSpecValidationException} for any of the following circumstances:
+
+\begin{itemize}
+\item	If the \texttt{statProfileNames} parameter of the \texttt{PCReportSpec} contains \ifpdf\\\fi \texttt{ReaderNames} and the \texttt{triggerList} parameter is specified.
+\item	If the \texttt{statProfileNames} parameter of the \texttt{PCReportSpec} contains \ifpdf\\\fi\texttt{ReaderSightingSignals} and the \texttt{triggerList} parameter is specified.
+\end{itemize}
+
+\subsubsection{Validation of PCSpecs}
+The \texttt{define, immediate} and \texttt{execute} methods of the ALEPC API raises a\ifpdf\\\fi \texttt{PCSpecValidationException} if any of the following are true:
+
+\begin{itemize}
+\item	The specified \texttt{specName} is an empty string or is not accepted by the implementation according to Section 4.5 of the ALE specification Document.
+\item	The \texttt{logicalReaders} parameter of \texttt{PCSpec} contains any logical reader names that are not known to the implementation.
+\item	The \texttt{boundarySpec} parameter is null or omitted.
+\item	The \texttt{duration, repeatPeriod}, and \texttt{noNewEventsInterval} parameter of \texttt{PCBoundarySpec} is negative.
+\item	Any element of \texttt{startTriggerList} or \texttt{stopTriggerList} parameter of \ifpdf\\\fi\texttt{PCBoundarySpec} does not conform to URI syntax as defined by  \ifpdf\\\fi[RFC2396], or is a URI that is not supported by the ALE implementation. Note that an empty string does not conform to URI syntax as defined by [RFC2396].
+\item	No stopping condition is specified in \texttt{PCBoundarySpec}:\ifpdf\\\fi i.e. \texttt{stopTriggerList} is empty, and neither \texttt{duration} nor \ifpdf\\\fi\texttt{noNewEventsInterval} nor \texttt{whenDataAvailable} is specified.
+\item	Any \texttt{PCReportSpec} instance has a name that is an empty string or that is not accepted by the implementation according to Section 4.5 of the ALE specification document.
+\item	Two \texttt{PCReportSpec} instances have identical values for their name field.
+\item	The \texttt{patList} parameter of any \texttt{ECFilterListMember} instance is empty, null, or omitted, or any element of \texttt{patList} does not conform to the syntax rules for patterns implied by the specified \texttt{fieldSpec}.
+\item	The value of any element of \texttt{triggerList} of \texttt{PCReportSpec} does not conform to URI syntax as defined by [RFC2396], or is a URI that is not supported by the ALE implementation. Note that an empty string does not conform to URI syntax as defined by [RFC2396].
+\item	Both \texttt{filterSpec} and \texttt{triggerList} of \texttt{PCReportSpec} are defined for the same \texttt{PCReportSpec} instance.
+\item	The \texttt{logicalReaders} parameter of \texttt{PCSpec} is null, omitted or an empty list and \texttt{triggerList} parameter of any \texttt{PCReportSpec} is not specified.
+\item	The \texttt{opType} parameter of a \texttt{PCOpSpec} is not one of the standard \texttt{opType} values specified in Section \ref{subsec: PCType}.
+\item	The \texttt{portSpec} parameter of a \texttt{PCOpSpec} is null or omitted.
+\item	The \texttt{id} parameter of a \texttt{PCPortSpec} is null, omitted or has a negative value
+\item	The \texttt{reader} parameter of a \texttt{PCPortSpec} is null, omitted or is any logical reader name that is not known to the implementation.
+\item	The \texttt{opType} parameter of a \texttt{PCPortSpec} is not one of the standard type values specified in Section \ref{subsec: PCPort}.
+\item	The \texttt{opType} parameter of a \texttt{PCPortSpec} requires a \texttt{dataSpec}, and \ifpdf\\\fi\texttt{dataSpec} is null or omitted.
+\item	The \texttt{opType} parameter of a \texttt{PCPortSpec} does not support \texttt{dataSpec}, and \texttt{dataSpec} is specified.
+\item	The \texttt{opType} parameter of a \texttt{PCOpspec} does not support \texttt{duration}, and \texttt{duration} is specified.
+\item	Two or more \texttt{PCOpSpec} instances within the same \texttt{PCReportSpec} instance or the list used by the \texttt{execute} method specify the same (non-empty) \texttt{opName}.
+\item	Any value of \texttt{PCStatProfileName} is not recognized, or is recognized but the specified statistics report is not supported.
+\item	The \texttt{statProfileNames} parameter of the \texttt{PCReportSpec} contains \ifpdf\\\fi\texttt{ReaderName} and the \texttt{triggerList} parameter is specified.
+\item	The \texttt{statProfileNames} parameter of the \texttt{PCReportSpec} contains \ifpdf\\\fi\texttt{ReaderSightingSignal} and the \texttt{triggerList} parameter is specified.
+\item	The \texttt{reader} parameter of a \texttt{PCPortSpec} is any logical reader name that is not a base reader.
+\end{itemize}
+
+\subsection{PCReports}
+\label{subsec:PCReports}
+The \texttt{PCReports} object is the output from a port cycle.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCReports}}\\
+\texttt{specName : String}\\
+\texttt{date : dateTime}\\
+\texttt{ALEID : String}\\
+\texttt{totalMilliseconds : long}\\
+\texttt{initiationCondition : PCInitiationCondition}\\
+\texttt{initiationTrigger : ECTrigger}\\
+\texttt{terminationCondition : PCTerminationCondition}\\
+\texttt{terminationTrigger : ECTrigger}\\
+\texttt{pcSpec : PCSpec}\\
+\texttt{reports : List<PCReport>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The ''meat'' of a \texttt{PCReports} instance is the ordered list of \texttt{PCReport} instances, each corresponding to a \texttt{PCReportSpec} instance in the port cycle's \texttt{PCSpec}, and appearing in the order corresponding to the \texttt{PCSpec}. In addition to the reports themselves, \texttt{PCReports} contains a number of ''header'' fields that provide useful information about the port cycle. The implementation includes these fields according to the following definitions:
+
+
+\begin{table}[!h]
+\begin{tabular}{ 
+|p{\dimexpr.31\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+|p{\dimexpr.69\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}
+&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{specName}&The name of the \texttt{PCSpec} that controlled this port cycle. In the case of a \texttt{PCSpec} that was requested using the immediate method, this name is one chosen by the ALE implementation.\\
+\hline
+\texttt{Date}&A representation of the date and time when the port cycle ended. For bindings in which this field is represented textually, an ISO-8601 compliant representation is used.\\
+\hline
+\texttt{ALEID}&An identifier for the deployed instance of the ALE implementation. The meaning of this identifier is outside the scope of this specification.\\
+\hline
+\texttt{totalMilliseconds}&The total time, in milliseconds, from the start of the port cycle to the end of the port cycle.\\
+\hline
+\texttt{initiationCondition}&Indicates what kind of event caused the port cycle to initiate: the receipt of an explicit start trigger, the expiration of the repeat period, or a transition to the requested state when no start triggers were specified in the \texttt{PCSpec}. These correspond to the possible ways of specifying the start of a port cycle as defined in Section \ref{subsec:PCBound}.\\
+\hline
+\texttt{initiationTrigger}&If \texttt{initiationCondition} is TRIGGER, the \texttt{ECTrigger} instance corresponding to the trigger that initiated the port cycle; omitted otherwise.\\
+\hline
+\texttt{terminationCondition}&Indicates what kind of event caused the port cycle to terminate: the receipt of an explicit stop trigger, the expiration of the port cycle duration or no events occurred for the prescribed amount of time. These correspond to the possible ways of specifying the end of a port cycle as defined in Section \ref{subsec:PCBound}.\\
+\hline
+\texttt{terminationTrigger}&If \texttt{terminationCondition} is TRIGGER, the \texttt{ECTrigger} instance corresponding to the trigger that terminated the port cycle; omitted otherwise.\\
+\hline
+\texttt{PCSpec}&A copy of the \texttt{PCSpec} that generated this \texttt{PCReports} instance. Only included if the \texttt{PCSpec} has \texttt{includeSpecInReports} set to true.\\
+ \hline
+\texttt{Reports}&A List containing a \texttt{PCReport} for each \texttt{PCReportSpec} in the corresponding \texttt{PCSpec}. See Section \ref{subsec:PCReport}.\\
+\hline
+\end{tabular}
+\caption{PCReports Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCInitiationCondition}
+\texttt{PCInitiationCondition} is an enumerated type that describes how a port cycle was started.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCInitiationCondition}}\\
+\texttt{TRIGGER}\\
+\texttt{REPEAT\_PERIOD}\\
+\texttt{REQUESTED}\\
+\texttt{UNDEFINE}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation set the \texttt{initiationCondition} field of a \texttt{PCReports} instance generated at the conclusion of a port cycle according to the condition that caused the port cycle to start, as specified in the following table:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{PCInitiationCondition}}&
+\multicolumn{1}{c|}{\textbf{Event causing the port cycle to start}}\\
+\hline
+\texttt{TRIGGER}&One of the trigger specified in startTriggerList of \texttt{PCBoundarySpec} was received.\\
+\hline
+\texttt{REPEAT\_PERIOD}&The \texttt{repeatPeriod} specified in the \texttt{PCBoundarySpec} expired, or the port cycle started immediately after the previous port cycle ended because neither a start trigger nor a repeat period was specified.\\
+\hline
+\texttt{REQUESTED}&The \texttt{PCSpec} transitioned from the unrequested state to the requested state and startTriggerList in \texttt{PCBoundarySpec} was empty.\\
+\hline
+\texttt{UNDEFINE}&Used when an outstanding poll call is terminated due to an undefined call, while the \texttt{PCSpec} was in the requested state.\\
+\hline
+\end{tabularx}
+\caption{PCInitiationCondition Values}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+Each row of this table corresponds to one of the possible start conditions specified in \ref{subsec:PCBound}.
+
+\subsubsection{PCTerminationCondition}
+\texttt{PCTerminationCondition} is an enumerated type that describes how a port cycle was ended.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCTerminationCondition}}\\
+\texttt{TRIGGER}\\
+\texttt{DURATION}\\
+\texttt{NO\_NEW\_EVENTS}\\
+\texttt{DATA\_AVAILABLE}\\
+\texttt{UNREQUEST}\\
+\texttt{UNDEFINE}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation set the \texttt{terminationCondition} field of a \ifpdf\\\fi\texttt{PCReports} instance generated at the conclusion of a port cycle according to the condition that caused the port cycle to end, as specified in the following table:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|X|X|}
+\hline
+\textbf{PCTerminationCondition}&\textbf{Event causing the port cycle to end}\\
+\hline
+\texttt{TRIGGER}&One of the trigger specified in stopTriggerList  of \texttt{PCBoundarySpec} was received.\\
+\hline
+\texttt{DURATION}&The \texttt{duration} specified in the \texttt{PCBoundarySpec} expired.\\
+\hline
+\texttt{NO\_NEW\_EVENTS}&No new events were raised within the \texttt{noNewEventsInterval} specified in the \texttt{PCBoundarySpec}.\\
+\hline
+\texttt{DATA\_AVAILABLE}&The whenDataAvailable parameter of the \texttt{PCBoundarySpec} was true and a Port was processed.\\
+\hline
+\texttt{UNREQUESTED}&The \texttt{PCSpec} transitioned to the unrequested state to the requested state. By definition, this value cannot actually appear in a \texttt{PCReports} instance sent to any client.\\
+\hline
+\texttt{UNDEFINE}&The \texttt{PCSpec} was removed by an undefined call while in the requested or active state.\\
+\hline
+\end{tabularx}
+\caption{PCTerminationCondition  Values}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+Each row of this table corresponds to one of the possible stop conditions specified in \ref{subsec:PCBound}.
+
+\subsubsection{PCReport}
+\label{subsec:PCReport}
+Each \texttt{PCReportSpec} in the \texttt{PCSpec} is associated with a \texttt{PCReport}.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCReport}}\\
+\texttt{reportName : String}\\
+\texttt{eventReports : List<PCEventReport>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs a \texttt{PCReport} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.23\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.59\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{reportName} &\texttt{String}&A copy of the \texttt{reportName} field from the corresponding \texttt{PCReportSpec} within the \texttt{PCSpec} that controlled this port cycle.\\ \hline 
+\texttt{eventReport} &\texttt{List}\newline\texttt{<PCEventReport>}&An unordered list of \texttt{PCEventReport} instances, one for each event occurred during the port cycle that matches the filter or trigger conditions of the corresponding \texttt{PCReportSpec}.\\ \hline 
+\end{tabular}
+\caption{PCReport Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCEventReport}
+A \texttt{PCEventReport} describes what happened during the processing of a single event that cause operations on a port to be processed.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCEventReport}}\\
+\texttt{id : String}\\
+\texttt{opReports : List<PCOpReport>}\\
+\texttt{stats : List<PCEventStat>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs a PCEventReport from operation processed on a single Port, as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|R|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{id} &\texttt{String}&A data value that identifies the event that caused the operation to be processed. This could be either a epc-tag or a trigger-urn if a trigger depending on what kind of matching event occurred.\\ 
+\hline
+\end{tabularx}
+\end{table}
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|R|}
+\hline 
+\texttt{opReports} &\texttt{List<PCOpReport>}&An unordered list of \texttt{PCOpReport} instances, one for each of the corresponding \texttt{PCOpSpec} instances in the corresponding \texttt{PCReportSpec} in the corresponding order.\\ \hline 
+\texttt{Stats}&\texttt{List<PCEventStat>}&Null, if the \texttt{statProfileNames} parameter of the corresponding \texttt{PCReportSpec} is empty, omitted, or null. Otherwise, contains a \texttt{PCEventStat} for each statistics profile named in the \texttt{statProfileNames} parameter of the corresponding \texttt{PCReportSpec}, in the corresponding order.\\
+\hline
+\end{tabularx}
+\caption{PCEventReport Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCOpReport}
+A \texttt{PCOpReport} contains the result of a single \texttt{PCOpSpec} executing on a port during a port cycle.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCOpReport}}\\
+\texttt{state : Boolean // Conditional}\\
+\texttt{opStatus : PCOpStatus}\\
+\texttt{opName : String // Conditional}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+This ALE implementation constructs a \texttt{PCOpReport} as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{state} &\texttt{Boolean}&(Conditional) The result of the operation, according to the table below, or null if an error occurred.\\ \hline 
+\texttt{opStatus} &\texttt{PCOpStatus}&Specifies whether the operation succeeded or failed (see Section \ref{subsec: PcStat}). \\ \hline 
+\texttt{opName}&\texttt{String}&(Conditional) A copy of the \texttt{opName} parameter of the corresponding \texttt{PCOpSpec}. Omitted if the \texttt{opName} parameter was omitted from the corresponding \texttt{PCOpSpec}.\\
+\hline
+\end{tabularx}
+\caption{PCOpReport Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The value of the \texttt{data} field is constructed according to the following table:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.16\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.20\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.64\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\textbf{PCOpType}\newline\textbf{Value}&\multicolumn{1}{c|}{\textbf{Description}}&\multicolumn{1}{c|}{\textbf{state Value}}\\
+\hline 
+\texttt{READ} &\texttt{Read port status.}&The boolean value that was read from the port status which indicates if the port is activated or not.\\ \hline 
+\texttt{WRITE} &\texttt{Set port status.}&The value is omitted. \\ \hline 
+\end{tabular}
+\caption{PCOpReport state Field Values}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCOpStatus}
+\label{subsec: PcStat}
+\texttt{PCOpStatus} is an enumerated value that lists the several possible outcomes for a given operation.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{Enumerated Type} $>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCOpStatus}}\\
+\texttt{SUCCESS}\\
+\texttt{MISC\_ERROR\_TOTAL}\\
+\texttt{MISC\_ERROR\_PARTIAL}\\
+\texttt{PORT\_NOT\_FOUND\_ERROR}\\
+\texttt{OP\_NOT\_POSSIBLE\_ERROR}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The codes that contain \texttt{ERROR} in their names are errors that arise during the interaction between the ALE implementation and the Port. \\
+This ALE implementation returns \texttt{PCOpStatus} codes according to the following table:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.33\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.67\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\multicolumn{1}{|c|}{\textbf{Status Code}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{SUCCESS} &The operation completed successfully.\\ \hline 
+\texttt{MISC\_ERROR\_TOTAL}&An error occurred during the processing of this operation that resulted in total failure. The state of the Port following the operation is unchanged. The ALE implementation returns this code only if no more specific code applies. \\ \hline 
+\texttt{MISC\_ERROR\_PARTIAL}&An error occurred during the processing of this operation that resulted in partial failure. The state of the Port following the operation attempt is indeterminate.\\ \hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.33\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.67\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\texttt{PORT\_NOT\_FOUND\_ERROR}&The specified port of the reader was not found.\\ \hline
+\texttt{OP\_NOT\_POSSIBLE\_ERROR}&The specified operation is not possible on the specified port or on the specified reader.\\ 
+\hline
+\end{tabular}
+\caption{PCOpStatus Values}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCEventStat}
+\setlength{\intextsep}{0.1cm}
+A \texttt{PCEventStat} provides additional, implementation-defined information \ifpdf\\\fi about each ''occurring'' of an event, which is, each time an event acquired by one of the Reader participating in the port cycle.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCEventStat}}\\
+\texttt{profile : PCStatProfileName}\\
+\texttt{statBlocks : List<ECReaderStat>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The ALE implementation constructs a \texttt{PCEventStat} as follows:
+\setlength{\intextsep}{0.7cm}
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{profile} &\texttt{PCStatProfileName}&The name of the statistics profile that governed the generation of this \texttt{PCEventStat instance}.\\ \hline 
+\texttt{statBlocks} &\texttt{List<ECReaderStat>}&An unordered list containing an \texttt{ECReaderStat} instance for each Reader that occurred this event. \\
+\hline
+\end{tabularx}
+\caption{PCEventStat Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCEventTimestampStat}
+\texttt{PCEventTimestampStat} is a subclass of \texttt{PCEventStat}. The ALE implementation includes one \texttt{PCEventTimestampStat} in a \texttt{PCEventReport} if the \texttt{EventTimestamp} statistics profile was included in the corresponding \ifpdf\\\fi\texttt{PCReportSpec}.
+
+\texttt{PCEventTimestampStat} includes all of the fields in \texttt{PCEventStat}, plus the following additional fields:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCEventTimestampStat}}\\
+\texttt{firstOccurringTime : dateTime}\\
+\texttt{lastOccurringTime : dateTime}\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The ALE implementation constructs a \texttt{PCEventTimestampStat} as follows:
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.22\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.28\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.5\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{profile} &\texttt{PCStatProfileName}&This field contains the \texttt{EventTimestamp} value of \texttt{PCStatProfileName}.\\ 
+\hline 
+\texttt{statBlock} &\texttt{List<ECReaderStat>}&This field contains an empty list.\\
+\hline
+\texttt{firstOccurring}\newline\texttt{Time}&\texttt{dateTime}&This field contains the first time within this port cycle that the event occurred by any reader contributing to this port cycle.\\ 
+\hline
+\texttt{lastOccurring}\newline\texttt{Time}&\texttt{dateTime}&This field contains the last time within this port cycle that the event occurred by any reader contributing to this port cycle.\\ \hline
+\end{tabular}
+\caption{PCEventTimestampStat  Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsubsection{PCEventCountStat}
+\texttt{PCEventCountStat} is a subclass of \texttt{PCEventStat}. The ALE implementation includes one \texttt{PCEventCountStat} in a \texttt{PCEventReport} if the \texttt{EventCount} statistics profile was included in the corresponding \texttt{PCReportSpec}.\\
+\texttt{ PCEventCountStat} includes all of the fields in \texttt{PCEventStat}, plus the following additional fields:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{PCEventCountStat}}\\
+\texttt{count : int}\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The ALE implementation constructs a \texttt{PCEventCountStat } as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|X|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline 
+\texttt{profile} &\texttt{PCStatProfileName}&This field contains the \texttt{EventCount} value of \texttt{PCStatProfileName}.\\ 
+\hline 
+\texttt{statBlock} &\texttt{List<ECReaderStat>}&This field contains an empty list.\\
+\hline
+\texttt{Count}&\texttt{int}&This field contains the count how often this event occurred within this port cycle by any reader contributing to this port cycle.\\ \hline
+\end{tabularx}
+\caption{PCEventCountStat Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier 
+
+\subsection{ALEPCCallback Interface}
+\label{subsec:ALEPCCallback}
+The \texttt{ALEPCCallback} interface is the path by which this ALE implementation delivers asynchronous results from port cycles to subscribers.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$ \texttt{interface}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ALEPCCallback}}\\
+\texttt{callbackResults (reports : PCReports) : void}\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+Referring to the state transition tables in Section 5.6.1 of the ALE specification Document, whenever a transition specifies that ''reports are delivered to subscribers'' this ALE implementation attempts to deliver the results to each subscriber by invoking the \texttt{callbackResults} method of the ALEPCCallback interface once for each subscriber, passing the \texttt{PCReports} for the port cycle as specified by the notification URI for that subscriber as specified in the \texttt{subscribe} call. All subscribers receive an identical \texttt{PCReports} instance.
+
+\newpage
+\section {Bindings for the Callback APIs}
+This section specifies XML-based bindings for ALECallback, ALECCCallback and ALEPCCallback interfaces, through which the ALE Reading API, the ALE Writing API and the ccr Input and Output API, respectively, deliver asynchronous notifications to subscribers. Each binding of these interfaces specifies a syntax for notification URIs. A notification URI is supplied by an ALE client as a parameter of the  \texttt{subscribe} and  \texttt{unsubscribe} methods of the ALE Reading, Writing API or Digital Input and Output API. The notification URI both selects a binding of the callback interface to be used for that subscriber, and provides addressing information in a manner specified by each binding below.
+
+\subsection{HTTP Binding}
+The HTTP bindings of the \texttt{ALECallback\ifincludecc , ALECCCallback \fi} and \texttt{ALEPCCallback} interfaces provide for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports}, respectively, in XML via the HTTP protocol using the POST operation.
+
+The syntax for HTTP notification URIs as used by these bindings is defined in RFC2616. Informally, an HTTP URI has one of the two following forms:
+
+\texttt{\ULurl{http://host:port/remainder-of-URL}}\\
+\texttt{\ULurl{http://host/remainder-of-URL}}
+
+where
+\begin{itemize}
+\item 	 \texttt{host} is the DNS name or IP address of the host where the callback receiver is listening for incoming HTTP connections.
+\item 	 \texttt{port} is the TCP port on which the callback receiver is listening for incoming HTTP connections. The port and the preceding colon character may be omitted, in which case the port defaults to 80.
+\item	 \texttt{remainder-of-URL} is the URL to which an HTTP POST operation will be directed.
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation delivers event cycle, command cycle or port cycle reports by sending an HTTP POST request to the callback receiver designated in the URI, where  \texttt{remainder-of-URL} is included in the HTTP \texttt{request-line}, and where the payload is the \texttt{ECReports} instance\ifincludecc , \texttt{CCReports} instance \fi or \texttt{PCReports} instance encoded in XML according to the schema.
+
+This ALE implementation does not interpret the response code value returned by the callback receiver. Therefore the implementation interprets any response code that is not null as a normal response, not indicative of any error.
+
+\ifincludetcp
+\subsection{TCP Binding}
+The TCP binding of the \texttt{ALECallback\ifincludecc , ALECCCallback \fi} and \texttt{ALEPCCallback} interfaces provide for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports}, respectively, in XML via a raw TCP connection.
+
+The syntax for TCP notification URIs as used by these bindings is defined in RFC2396. Informally, a TCP URI has the following form:
+
+tcp://host:port
+
+where
+\begin{itemize}
+\item 	 \texttt{host} is the DNS name or IP address of the host where the callback receiver is listening for incoming TCP connections.
+\item 	 \texttt{port} is the TCP port on which the callback receiver is listening for incoming TCP connections. 
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation delivers event cycle, command cycle or port cycle reports by opening a new TCP connection to the specified host and port, writing to the connection the \texttt{ECREports} instance\ifincludecc , \texttt{CCReports} instance \fi or \texttt{PCReports} instance, encoded in XML according to the schema and then closing the connection. The implementation does not require a reply or acknowledgement.
+\fi
+
+\ifincludeudp
+\subsection{UDP Binding}
+The UDP binding of the \texttt{ALECallback\ifincludecc , ALECCCallback \fi} and \texttt{ALEPCCallback} interfaces provide for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports}, respectively, in XML via a raw UDP connection.
+
+The syntax for UDP notification URIs as used by these bindings is defined in RFC2396. Informally, a UDP URI has the following form:
+
+udp://host:port
+
+where
+\begin{itemize}
+\item 	 \texttt{host} is the DNS name or IP address of the host where the callback receiver is listening for incoming UDP data.
+\item 	 \texttt{port} is the UDP port on which the callback receiver is listening for incoming UDP data. 
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation delivers event cycle, command cycle or port cycle reports by directly writing the \texttt{ECREports} instance\ifincludecc , \texttt{CCReports} instance \fi or \texttt{PCReports} instance, encoded in XML according to the schema, to the UDP socket. The implementation does not require a reply or acknowledgement.
+\fi
+
+\ifincludefile
+\subsection{FILE Binding}
+The FILE bindingsof the \texttt{ALECallback\ifincludecc , ALECCCallback \fi} and \texttt{ALEPCCallback} interfaces provide for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports}, respectively, in XML to a file.
+
+The syntax for FILE notification URIs as used by these bindings is defined in RFC1738. Informally, a FILE URI has one of the two following forms:
+
+\texttt{\ULurl{file:///path/file}}
+
+\texttt{\ULurl{file:///path/file DATETIME}}
+
+where
+\begin{itemize}
+\item 	 \texttt{path} is the pathname of a folder within the local filesystem.
+\item 	 \texttt{file} is the filename of a file within the local filesystem. 
+\item	 \texttt{DATETIME} is a placeholder within the \texttt{file} parameter which will be replaced by the current date time in format ''YYYYMMDDHHMMSSFF'' this results in a new file for every delivered report. If omitted only one file with the name of the file parameter will be used.
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG implementation delivers an event cycle, command cycle or port cycle report by appending to the specified file within folder the \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports} instance encoded in XML according to the schema. The implementation will raise an \texttt{InvalidURIException} if the folder specified by the path parameter does not exists, if the file specified by the file parameter does not exists the implementation will create the file. If the DATETIME placeholder is used a new file will be created for every delivered \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports} instance instead of appending the report to a single file. Note that if DATETIME is omitted and more than one cycle completes, the file will contain a concatenation of XML documents, rather than a single XML document.
+\fi
+\ifincludesql
+\subsection{SQL Binding}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides different SQL bindings of the \texttt{ALECallback\ifincludecc , ALECCCallback \fi} and \texttt{ALEPCCallback} interfaces for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports}, in SQL statement via the an SQL INSERT operation. The following chapters will describe the different SQL bindings and in chapter \ref{subsec: SQLB} the mapping option for all these bindings will be described as well.
+
+The database drivers to access H2 databases are included in this implementation, all other drivers, e.g. MySQL, PostgreSQL or Microsoft SQL, must be installed manually. Please contact HARTING IT Software Development GmbH \& Co KG to request the necessary drivers. 
+
+The syntax for SQL notification URIs as used by this binding is defined below.
+Informally, a SQL URI has one of two the following forms:
+
+\texttt{sql://?connection=\$ConnectionString\$}\\
+\hspace*{2cm}\texttt{\&table=\$TableName\$}\\
+\hspace*{2cm}\texttt{\&plain=\$ColumnName\$}\\
+
+\texttt{sql://?connection=\$ConnectionString\$}\\
+\hspace*{2cm}\texttt{\&table=\$TableName\$}\\
+\hspace*{2cm}\texttt{\&storage=\$StorageName\$}\\
+\hspace*{2cm}\texttt{\&init=\$InitTable\$}\\
+\hspace*{2cm}\texttt{\&clear=\$ClearTable\$}\\
+\hspace*{2cm}\texttt{\&drop=\$DropTable\$}\\
+\hspace*{2cm}\texttt{\&\$ColumnMappingList\$}\\
+
+where
+\begin{itemize}
+\item 	 \texttt{connection} specifies the JDBC connection string of the database\\ (i.e. for MySQL: \texttt{jdbc:mysql://<MySQL Server Host>:3306/db1} or for in memory data storage: \texttt{jdbc:h2:mem:db1}).
+\item 	 \texttt{table} specifies a table name of the table within the database. 
+\item	 \texttt{plain} specifies a column name within the table where the implementation will write to the \texttt{ECReports} instance\ifincludecc , \texttt{CCReports} instance \fi or the \texttt{PCReports} instance encoded in XML according to the schema. If omitted the column mapping will be used instead.
+\item	 \texttt{storage} optionally specifies a name to allow exporting the table entries (via \texttt{HTTP GET} with a \texttt{text/plain} response formatted in CSV) and to be able to delete them (via \texttt{HTTP DELETE}) while the subscriber is active. Note, this only works correctly when defining the \texttt{ColumnMappingList}.
+\item	 \texttt{init} optionally specifies whether the database table will be created on a \texttt{subscribe} call.
+\item	 \texttt{clear} optionally specifies whether the database table entries will be deleted on a \texttt{subscribe} call.
+\item	 \texttt{drop} optionally specifies whether the database table will be dropped on a \texttt{unsubscribe} call.
+\item	 \texttt{ColumnMappingList} is a list of query parameters that will map specific information from an \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports} instance into the specified column within the table. This ALE implementation will interpret these parameters as defined in section \ref{subsec: SQLB}.
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation delivers event cycle, command cycle or port cycle reports by sending one or more INSERT operations to the specified table and columns within the database, and where the values are the \texttt{ECReports} instance\ifincludecc , \texttt{CCReports} instance \fi or \texttt{PCReports} instance information mapped on columns as specified through the URI see section \ref{subsec: SQLB} for mapping options.
+
+\subsubsection{SQL Timeout Options}
+This ALE implementation provides no option to set a general socket or connect timeout for connections to remote databases. Please set the vendor specific socket or connect timeout parameter in the JDBC connection string.
+\subsubsection{SQL Binding Mapping Options}
+\label{subsec: SQLB}
+This ALE implementation provides the two mapping options plain and column mapping. If the plain parameter is specified the implementation will insert the complete \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports} instance encoded in XML according to schema in a single column within the table. If omitted the column mapping will be used instead, where one INSERT operation will be send to the database for each\\
+ \texttt{ECReportGroupListMember} within an \texttt{ECReports\ifincludecc , CCOpReport \fi} within a\\
+\ifincludecc \texttt{CCReports} or \fi \texttt{PCOpReport} within a \texttt{PCReports}. The implementation recognizes the parameters defined in the next three sub-sections for the column mapping options.
+
+\paragraph{ECReports}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides SQL binding mapping parameters for \texttt{ECReports} as specified in the below table. 
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.37\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{
+\textbf{Parameter}}&\multicolumn{1}{c|}{\textbf{Related Information}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{\texttt{spec}}&\texttt{ECReports.spec}&If specified the \texttt{spec} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{spec=SpecColumn})\\
+\hline
+\texttt{\texttt{date}}&\texttt{ECReports.date}&If specified the \texttt{date} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{date=DateColumn})\\
+\hline
+\texttt{\texttt{total\newline Milli\newline seconds}}&\texttt{ECReports.total\newline Milliseconds}&If specified the \texttt{totalMilliseconds} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{totalMilliseconds=\newline TotalMillisecondsColumn})\\
+\hline
+\texttt{\texttt{initiation\newline Condition}}&\texttt{ECReports.initiation\newline Condition}&If specified the \texttt{initiationCondition} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationCondition= \newline InitiationConditionColumn})\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{\texttt{initiation\newline Trigger}}&\texttt{ECReports.initiation\newline Trigger}&If specified the \texttt{initiationTrigger} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationTrigger= \newline InitiationTriggerColumn})\\
+\hline
+\texttt{\texttt{termination\newline Condition}}&\texttt{ECReports.termination\newline Condition}&If specified the \texttt{terminationCondition} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationCondition=\newline TerminationConditionColumn})\\
+\hline
+\texttt{\texttt{termination\newline Trigger}}&\texttt{ECReports.termination\newline Trigger}&If specified the \texttt{terminationTrigger} parameter within the \texttt{ECReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationTrigger=\newline TerminationTriggerColumn})\\
+\hline
+\texttt{\texttt{report}}&\texttt{ECReports.ECReport.\newline reportName}&If specified the \texttt{reportName} parameter within the \texttt{ECReport} will be inserted in the column according to the value.(i.e. \texttt{report=ReportNameColumn})\\
+\hline
+\texttt{\texttt{group}}&\texttt{ECReports.ECReport.\newline ECReportGroup.\newline groupName}&If specified the \texttt{groupname} parameter within the \texttt{ECReporGroup} will be inserted in the column according to the value.(i.e. \texttt{group=GroupNameColumn})\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{\texttt{count}}&\texttt{ECReports.ECReport.\newline ECReportGroup.\newline groupCount}&If specified the \texttt{groupCount} parameter within the \texttt{ECReportGroup} will be inserted in the column according to the value.(i.e. \texttt{group=GroupNameColumn})\\
+\hline
+\texttt{\texttt{epc}}&\texttt{ECReports.ECReport.\newline ECReportGroup \newline ECReportGroupList\newline Member.epc}&If specified the \texttt{epc} parameter within the \texttt{ECReportGroupListMember} will be inserted in the column according to the value.(i.e. \texttt{epc=EPCColumn})\\
+\hline
+\texttt{\texttt{tag}}&\texttt{ECReports.ECReport.\newline ECReportGroup \newline ECReportGroupList\newline Member.tag}&If specified the \texttt{tag} parameter within the \texttt{ECReportGroupListMember} will be inserted in the column according to the value.(i.e. \texttt{tag=TagColumn})\\
+\hline
+\texttt{\texttt{rawHex}}&\texttt{ECReports.ECReport.\newline ECReportGroup \newline ECReportGroupList\newline Member.rawHex}&If specified the \texttt{rawHex} parameter within the \texttt{ECReportGroupListMember} will be inserted in the column according to the value.(i.e. \texttt{rawHex=RawHexColumn})\\
+\hline
+\texttt{\texttt{field}}&\texttt{ECReports.ECReport.\newline ECReportGroup \newline ECReportGroupList\newline Member.ECReport\newline MemberField.value}&A parameter to specify a comma separated list of column names. If specified the value parameter of each member of the fieldList parameter within the ECReportGroupListMember will be inserted in order of their appearance in the next specified column. 
+(i.e. \texttt{field=Field1, Field2, Field3})\
+If fiewer columns then fields are specified the remaining fields will be omitted from the INSERT operation.\\
+\hline
+\end{tabular}
+\caption{ECReports SQL Binding Parameter}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+Through the notification URI each parameter could be assigned to a column within the database table. If a parameter is omitted the related information from the \texttt{ECReports} will be omitted in the INSERT operation as well.
+
+\ifincludecc
+\paragraph{CCReports}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides SQL binding mapping parameters for \texttt{CCReports} as specified in the below table. 
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{
+\textbf{Parameter}}&\multicolumn{1}{c|}{\textbf{Related Information}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{\texttt{spec}}&\texttt{CCReports.spec}&If specified the \texttt{spec} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{spec=SpecColumn})\\
+\hline
+\texttt{\texttt{date}}&\texttt{CCReports.date}&If specified the \texttt{date} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{date=DateColumn})\\
+\hline
+\texttt{\texttt{total\newline Milli\newline seconds}}&\texttt{CCReports.total\newline Milliseconds}&If specified the \texttt{totalMilliseconds} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{totalMilliseconds=\newline TotalMillisecondsColumn})\\
+\hline
+\texttt{\texttt{initiation\newline Condition}}&\texttt{CCReports.initiation\newline Condition}&If specified the \texttt{initiationCondition} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationCondition= \newline InitiationConditionColumn})\\
+\hline
+\texttt{\texttt{initiation\newline Trigger}}&\texttt{CCReports.initiation\newline Trigger}&If specified the \texttt{initiationTrigger} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationTrigger= \newline InitiationTriggerColumn})\\
+\hline
+\texttt{\texttt{termination\newline Condition}}&\texttt{CCReports.termination\newline Condition}&If specified the \texttt{terminationCondition} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationCondition=\newline TerminationConditionColumn})\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{\texttt{termination\newline Trigger}}&\texttt{CCReports.termination\newline Trigger}&If specified the \texttt{terminationTrigger} parameter within the \texttt{CCReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationTrigger=\newline TerminationTriggerColumn})\\
+\hline
+\texttt{\texttt{report}}&\texttt{CCReports.CCCmdReport.\newline cmdSpecName}&If specified the \texttt{cmdSpecName} parameter within the \texttt{CCCmdReport} will be inserted in the column according to the value.(i.e. \texttt{report=ReportNameColumn})\\
+\hline
+\texttt{\texttt{id}}&\texttt{CCReports.CCCmdReport.\newline CCTagReport.id}&If specified the \texttt{id} parameter within the \texttt{CCTagReport} will be inserted in the column according to the value.(i.e. \texttt{group=IdColumn})\\
+\hline
+\texttt{\texttt{name}}&\texttt{CCReports.CCCmdReport.\newline CCTagReport.CCOpReport \newline opName}&If specified the \texttt{opName} parameter within the \texttt{CCOpReport} will be inserted in the column according to the value.(i.e. \texttt{name=NameColumn})\\
+\hline
+\texttt{\texttt{status}}&\texttt{CCReports.CCCmdReport.\newline CCTagReport.CCOpReport \newline opStatus}&If specified the \texttt{opStatus} parameter within the \texttt{CCOpReport} will be inserted in the column according to the value.(i.e. \texttt{tag=StatusColumn})\\
+\hline
+\texttt{\texttt{data}}&\texttt{CCReports.CCCmdReport.\newline CCTagReport.CCOpReport \newline data}&If specified the \texttt{data} parameter within the \texttt{CCOpReport} will be inserted in the column according to the value.(i.e. \texttt{data=DataColumn})\\
+\hline
+\end{tabular}
+\caption {CCReports SQL Binding Parameter}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+Through the notification URI each parameter could be assigned to a column within the database table. If a parameter is omitted the related information from the \texttt{CCReports} will be omitted in the INSERT operation as well.
+\fi
+
+\paragraph{PCReports}
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides SQL binding mapping parameters for \texttt{PCReports} as specified in the below table. 
+
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\hline
+\multicolumn{1}{|c|}{
+\textbf{Parameter}}&\multicolumn{1}{c|}{\textbf{Related Information}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{\texttt{spec}}&\texttt{PCReports.spec}&If specified the \texttt{spec} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{spec=SpecColumn})\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{\texttt{date}}&\texttt{PCReports.date}&If specified the \texttt{date} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{date=DateColumn})\\
+\hline
+\texttt{\texttt{total\newline Milli\newline seconds}}&\texttt{PCReports.total\newline Milliseconds}&If specified the \texttt{totalMilliseconds} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{totalMilliseconds=\newline TotalMillisecondsColumn})\\
+\hline
+\texttt{\texttt{initiation\newline Condition}}&\texttt{PCReports.initiation\newline Condition}&If specified the \texttt{initiationCondition} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationCondition= \newline InitiationConditionColumn})\\
+\hline
+\texttt{\texttt{initiation\newline Trigger}}&\texttt{PCReports.initiation\newline Trigger}&If specified the \texttt{initiationTrigger} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{initiationTrigger= \newline InitiationTriggerColumn})\\
+\hline
+\texttt{\texttt{termination\newline Condition}}&\texttt{PCReports.termination\newline Condition}&If specified the \texttt{terminationCondition} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationCondition=\newline TerminationConditionColumn})\\
+\hline
+\texttt{\texttt{termination\newline Trigger}}&\texttt{PCReports.termination\newline Trigger}&If specified the \texttt{terminationTrigger} parameter within the \texttt{PCReports} will be inserted in the column according to the value.
+(i.e. \texttt{terminationTrigger=\newline TerminationTriggerColumn})\\
+\hline
+\texttt{\texttt{report}}&\texttt{PCReports.PCReport.\newline reportName}&If specified the \texttt{reportName} parameter within the \texttt{PCEventReport} will be inserted in the column according to the value.(i.e. \texttt{report=ReportNameColumn})\\
+\hline
+\texttt{\texttt{id}}&\texttt{PCReports.PCReport.\newline PCEventReport.id}&If specified the \texttt{id} parameter within the \texttt{PCEventReport} will be inserted in the column according to the value.(i.e. \texttt{group=IdColumn})\\
+\hline
+\texttt{\texttt{name}}&\texttt{PCReports.PCReport.\newline PCEventReport.\newline PCOpReport.opName}&If specified the \texttt{opName} parameter within the \texttt{PCOpReport} will be inserted in the column according to the value.(i.e. \texttt{name=NameColumn})\\
+\ifpdf
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[!h]
+\begin{tabular}{
+  |p{\dimexpr.18\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.34\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.48\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+}
+\fi
+\hline
+\texttt{\texttt{status}}&\texttt{PCReports.PCReport.\newline PCEventReport.\newline PCOpReport.opStatus}&If specified the \texttt{opStatus} parameter within the \texttt{PCOpReport} will be inserted in the column according to the value.(i.e. \texttt{tag=StatusColumn})\\
+\hline
+\texttt{\texttt{data}}&\texttt{PCReports.PCReport.\newline PCEventReport.\newline PCOpReport.data}&If specified the \texttt{data} parameter within the \texttt{PCOpReport} will be inserted in the column according to the value.(i.e. \texttt{data=DataColumn})\\
+\hline
+\end{tabular}
+\caption{PCReports SQL Binding Parameter}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+
+Through the notification URI each parameter could be assigned to a column within the database table. If a parameter is omitted the related information from the \texttt{PCReports} will be omitted in the INSERT operation as well.
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MQTT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifincludemqtt
+\subsection{MQTT Binding}
+The MQTT bindings of the \texttt{ALECallback\ifincludecc , ALECCCallback \fi}
+and \texttt{ALEPCCallback} interfaces provide for delivery of \texttt{ECReports\ifincludecc , CCReports \fi} or \texttt{PCReports},  respectively, as JSON strings via the MQTT publish method. 
+
+The syntax for MQTT notification URIs as used by these binding is defined in RFC3986 and must be percent-encoded. Informally, a MQTT URI has one of the following forms:
+
+\texttt{mqtt://[username[:password]]@host[:port]/topic}\\
+\hspace*{2cm}\texttt{?clientid=\$ClientID\$}\\
+\hspace*{2cm}\texttt{\&qos=\$qos\$}\\
+
+where
+\begin{itemize}
+\item 	\texttt{username} is the username for the authentication. The username and the following password may be omitted, in which case no user and password is used for authorization nor authentication.
+\item 	\texttt{password} is the password for the authorization of the user. The password and the preceding colon character may be omitted, in which case no password is used for authorization.
+\item	\texttt{host} is the DNS name or IP address of the MQTT Broker where the callback receiver is listening for incoming MQTT connections. 
+\item	\texttt{port} is the TCP port on which the callback receiver is listening for incoming MQTT connections. The port and the preceding colon character may be omitted, in which case the port defaults to 1883.
+\item	\texttt{topic} is the topic on which the report will be published. A topic consists of one or more topic levels, where each level is separated by a forward slash. Each topic must have at least 1 charater to be valid and it can also contain spaces. Also a topic is case sensitive. Additionally the forward slash alone is a valid topic, too. A topic can contain one or more placeholders, which will be replaced by the values of the current report. Each placeholder must be in curly brackets. (i.e \texttt{/\{report\}/\{reader\}/\{antenna\}}). If the value is not available in the current report the placeholder will be replaced by an empty string. This ALE implementation will interpret these placeholders as defined in section Placeholder.
+\item	\texttt{clientid} is the id of the client which will be used to established the MQTT connection
+\item	\texttt{qos} is the quality of service value which will be used to publish.\\(0 = At most once; 1 = At least once, 2 = exactly once)
+
+\end{itemize}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation delivers event cycle\ifincludecc , command cycle \fi or port cycle reports by executing a MQTT publish command to the specified MQTT Broker and topic, while the message will be encoded in JSON format.
+
+\fi
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MQTT end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ALE Web Service URLs}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation provides the following ALE web service URIs:
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$\texttt{ALE Web Service URIs}$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{}}\\
+\texttt{EC: \textcolor{blue}{http://<Container Host>:8888/services/ALE/EC?wsdl}}\\
+\texttt{\textendash \textendash \textendash}\\
+\texttt{LR: \textcolor{blue}{http://<Container Host>:8888/services/ALE/LR?wsdl}}\\
+\texttt{\textendash \textendash \textendash}\\
+\texttt{TM: \textcolor{blue}{http://<Container Host>:8888/services/ALE/TM?wsdl}}\\
+\texttt{\textendash \textendash \textendash}\\
+\ifincludecc
+\texttt{CC: \textcolor{blue}{http://<Container Host>:8888/services/ALE/CC?wsdl}}\\
+\texttt{\textendash \textendash \textendash}\\
+\fi
+\texttt{PC: \textcolor{blue}{http://<Container Host>:8888/services/ALE/PC?wsdl}}\\
+\texttt{\textendash \textendash \textendash}\\
+\texttt{Trigger: \textcolor{blue}{http://<Container Host>:8888/services/ALE/trigger/}}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+\ifincluderc
+\section{ALE Reader Configuration API}
+\label{subsec:ALEReader}
+The ALE Reader Configuration API is an interface through which clients may obtain configuration information from base reader defined by the Logical Reader API. The API allows clients to obtain the complete configuration and not only the configuration properties, which were set through the Logical Reader API.
+
+\subsection{ALERC-Main API Class}
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{$<$<$\texttt{interface}$>$>$}\\
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{ALERM}}\\
+\texttt{\textendash \textendash \textendash}\\
+\texttt{getRCConfiguration( name : String) : RCConfiguration}\\
+\texttt{getStandardVersion() : String}\\
+\texttt{getVendorVersion() : String}\\
+$<$<$\texttt{extension point}$>$>$\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation implements the methods of the ALE Reader Configuration API as specified in the following table:
+
+\begin{table}[!h]
+\ifpdf
+\begin{tabular}{
+  |p{\dimexpr.28\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 1
+  |p{\dimexpr.15\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+ |p{\dimexpr.24\linewidth-2\tabcolsep-1.3333\arrayrulewidth}% column 2
+  |p{\dimexpr.33\linewidth-2\tabcolsep-1.3333\arrayrulewidth}|% column 3
+  }
+\hline
+\multicolumn{1}{|c|}{
+\textbf{Method}}&
+\textbf {Argument /Result}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{getRCConfiguration}&\texttt{name}&\texttt{String}&\multirow{3}{120pt}{Returns the complete configuration of the base reader named name.}\\
+\cline{2-3} &\textbf{\texttt{[result]}} &\texttt{RCConfiguration}&\\
+&&&\\
+\hline
+\texttt{getStandardVersion}&\textbf{\texttt{[result]}}&\texttt{String}&Returns a string that identifies what version of the specification this implementation of the Reader Configuration API complies with.\\
+\hline
+\texttt{getVendorVersion}&\textbf{\texttt{[result]}}&\texttt{String}&Returns a string that identifies what vendor extensions this implementation of the Reader Configuration API provides.\\
+\hline
+\end{tabular}
+\else
+\HCode{
+<table class='tabular'> <tr> <td  style="text-align:center;"><b>Method</b></td> <td style="text-align:center;"><b>Argument/Result</b></td> <td  style="text-align:center;"><b>Type</b></td> <td  style="text-align:center;"><b>Description</b></td> </tr> <tr> <td rowspan="2"><span class='courier'>getRCConfiguration</span></td> <td><span class='courier'>name</span></td> <td><span class='courier'>String</span></td> <td rowspan="2">Returns the complete configuration of the base reader named name.</td> </tr> <tr> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>RCConfiguration</span></td> </tr> <tr> <td><span class='courier'>getStandardVersion</span></td> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>String</span></td> <td>Returns a string that identifies what version of the specification this implementation of the Reader Configuration API complies with.</td> </tr> <tr> <td><span class='courier'>getVendorVersion</span></td> <td><span class='courier'><b>[result]</b></span></td> <td><span class='courier'>String</span></td> <td>Returns a string that identifies what vendor extensions this implementation of the Reader Configuration API provides.</td> </tr> <tr></tr></table>}
+\fi
+\caption{ALERC Interface Methods}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+The primary data type associated with the ALE Reader Configuration API is the RCConfiguration, which represents the complete configuration of a given base reader. The next section, Section \ref{subsec: RCConf}, specify the RCConfiguration data type in full detail.
+
+\subsubsection{Error Conditions}
+Methods of the ALE Reader Configuration API signal error conditions to the client by means of exceptions. The following exceptions are defined. All the exception types in the following table are extensions of a common\ifpdf\\\fi ALEException base type, which contains one string element giving the reason for the exception.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Exception Name}}&
+\multicolumn{1}{c|}{\textbf{Meaning}}\\
+\hline
+\texttt{SecurityException}&The operation was not permitted due to an access control violation or other security concern.\\
+\hline
+\texttt{NoSuchNameException} &The specified reader name does not exist.\\
+\hline
+\texttt{NonBaseReaderException}&The specified reader named name is not a known base reader.\\
+\hline
+\texttt{ImplementationException}&A generic exception raised by the implementation for reasons that are implementation-specific. This exception contains one additional element: a severity member whose values are either ERROR or SEVERE. ERROR indicates that the ALE implementation is left in the same state it had before the operation was attempted. SEVERE indicates that the ALE implementation is left in an indeterminate state.\\
+\hline
+\end{tabularx}
+\caption{Exceptions in the ALERC Interface}
+\ifpdf
+\MakeLineNo
+\fi
+\end{table}
+\FloatBarrier
+
+The exceptions that may be raised by each ALERC method are indicated in the table below. This ALE implementation raises the appropriate exception listed below when the corresponding condition described above occurs. If more than one exception condition applies to a given method call, the Ale implementation may raise any of the exceptions that applies.
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\multicolumn{1}{|c}{
+\textbf{ALE Method}}&\multicolumn{1}{|c|}{\textbf{Exceptions}}\\
+\hline
+\texttt{getRCConfiguration}&NoSuchNameException\newline
+NonBaseReaderException\newline
+SecurityException\newline
+ImplementationException\\
+\hline
+\texttt{getStandardVersion} &ImplementationException\\
+\hline
+\texttt{getVendorVersion}&ImplementationException\\
+\hline
+\end{tabularx}
+\caption{Exceptions Raised by each ALEPC Interface Method}
+\MakeLineNo 
+\end{table}
+\FloatBarrier
+
+\subsection{RCConfiguration}
+\label{subsec: RCConf}
+An RCConfiguration describes a complete configuration of a single base reader.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{RCConfiguration}}\\
+\texttt{name : String }\\
+\texttt{xmlStyleSheet: RCStyleSheet}\\
+\texttt{node:List<RCNode>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation constructs an RCConfiguration as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{name}&\texttt{String}&The name of the base reader that was requested using the getRCConfiguration method.\\
+\hline
+\texttt{xmlStyleSheet}&\texttt{RCStyleSheet}&An object with style information to display the configuration.\\
+\hline
+\texttt{node}&\texttt{List<RCNode>}&An unordered list of configuration nodes, each representing a configuration branch or leaf.\\
+\hline
+\end {tabularx}
+\caption{RCConfiguration Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{RCStyleSheet}
+An RCStyleSheet contains information to display an RCConfiguration instance according to the reader type of a base reader.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{RCStyleSheet}}\\
+\texttt{type : String }\\
+\texttt{href : String}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation constructs an RCStyleSheet as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}
+&\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{type}&\texttt{String}&Indicates what kind of style sheet document is linked in the href parameter.\\
+\hline
+\texttt{href}&\texttt{String}&A link to a style sheet document to display an RCConfiguration according to the reader type.\\
+\hline
+\end{tabularx}
+\caption{RCStyleSheet Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{RCNode}
+A RCNode represents a configuration node of a base reader. An RCNode is identified by a name and contains other RCNodes and/or RCProperties, it is structured such like an XML document.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{RCNode}}\\
+\texttt{name : String }\\
+\texttt{properties : List<RCProperty>}\\
+\texttt{node : List<RCNode>}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation constructs an RCNode as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}}&
+\multicolumn{1}{c|}{\textbf{Type}}&
+\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{name}&\texttt{String}& Represents the name of this configuration node according to the reader type.\\
+\hline
+\texttt{properties}&\texttt{List<RCProperty>}&An unordered list of reader configuration properties corresponding to this node.\\
+\hline
+\texttt{node}&\texttt{List<RCNode>}&An unordered list of child nodes corresponding to this node..\\
+\hline
+\end {tabularx}
+\caption{RCNode Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+
+\subsection{RCProperty}
+An RCProperty represents a configuration property of a base reader.
+
+\begin{bbox}
+\begin{edtable}{tabularx}{\linewidth}{|X|}
+\hline 
+\rowcolor{lightgray}
+\multicolumn{1}{|c|}{\texttt{RCProperty}}\\
+\texttt{name : String }\\
+\texttt{value : String}\\
+$<$<$\texttt{extension point}$>$>$\\
+\texttt{\textendash \textendash \textendash}\\
+\hline
+\end{edtable}
+\end{bbox}
+
+The HARTING IT Software Development GmbH \& Co KG vendor implementation constructs an RCProperty as follows:
+
+\begin{table}[!h]
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\multicolumn{1}{|c|}{
+\textbf{Field}}&\multicolumn{1}{c|}{\textbf{Type}}&\multicolumn{1}{c|}{\textbf{Description}}\\
+\hline
+\texttt{name}&\texttt{String}&The name of the reader configuration property.\\
+\hline
+\texttt{value}&\texttt{String}&The value of the reader configuration property.\\
+\hline
+\end{tabularx}
+\caption{RCProperty Fields}
+\MakeLineNo
+\end{table}
+\FloatBarrier
+\fi
+
+\section {Appendix}
+
+\section {Glossary}
+\section {References}
+\textbf {Literary References}
+
+\begin{itemize}
+\renewcommand\labelitemi{--}
+\item	
+\end{itemize}
+\textbf {Internet References}
+\begin{itemize}
+\renewcommand\labelitemi{--}
+\sloppy
+\item	The ALE Specification Part 1, EPCglobal\\
+\url{http://www.gs1.org/sites/default/files/docs/epc/ale_1_1_1-standard-core-20090313.pdf}
+
+EPCglobal, Version 1.1.1
+\item  The ALE Specification Part 2, EPCglobal\\
+\url{http://www.gs1.org/sites/default/files/docs/epc/ale_1_1_1-standard-XMLandSOAPbindings-20090313.pdf}\\
+EPCglobal, Version 1.1.1
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>002</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<duration unit="MS">2000</duration>
+	</boundarySpec>
+	<reportSpecs>
+		<reportSpec reportName="Additions" reportIfEmpty="true">
+			<reportSet set="ADDITIONS" />
+			<filterSpec>
+				<extension>
+					<filterList>
+						<filter>
+							<includeExclude>INCLUDE</includeExclude>
+							<fieldspec>
+								<fieldname>epc</fieldname>
+							</fieldspec>
+							<patList>
+								<pat>urn:epc:pat:sgtin-96:1.392177.1234567.[0-5000]</pat>
+								<pat>urn:epc:pat:sgtin-96:1.392177.1234569.[0-5000]</pat>
+							</patList>
+						</filter>
+						<filter>
+							<includeExclude>EXCLUDE</includeExclude>
+							<fieldspec>
+								<fieldname>epc</fieldname>
+							</fieldspec>
+							<patList>
+								<pat>urn:epc:pat:sgtin-96:1.392177.1234567.[4717-4718]</pat>
+							</patList>
+						</filter>
+					</filterList>
+				</extension>
+			</filterSpec>
+			<groupSpec>
+				<pattern>urn:epc:pat:sgtin-96:1.392177.1234567.[4710-4715]</pattern>
+				<pattern>urn:epc:pat:sgtin-96:1.392177.1234567.[4716-4720]</pattern>
+				<extension>
+					<fieldspec>
+						<fieldname>epc</fieldname>
+					</fieldspec>
+				</extension>
+			</groupSpec>
+			<output includeTag="true" includeCount="true" />
+		</reportSpec>
+	</reportSpecs>
+</ale:ECSpec>

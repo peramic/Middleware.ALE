@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ale:ECReports specName="" date="0001-01-01T00:00:00"
+	ALEID="Ha-VIS Middleware" totalMilliseconds="2500" initiationCondition="REQUESTED"
+	terminationCondition="UNDEFINE" xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<reports>
+		<report reportName="Additions">
+			<group>
+				<groupList>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4711</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4712</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4713</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234568.4713</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234569.4713</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4714</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4715</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4716</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4717</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4718</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234567.4719</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234569.4712</epc>
+					</member>
+					<member>
+						<epc>urn:epc:id:sgtin:392177.1234569.4720</epc>
+					</member>
+				</groupList>
+			</group>
+		</report>
+	</reports>
+</ale:ECReports>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>007</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">2000</repeatPeriod>
+		<duration unit="MS">2000</duration>
+	</boundarySpec>
+	<reportSpecs>
+		<reportSpec reportName="default">
+			<reportSet set="CURRENT" />
+			<output includeTag="true" includeCount="true">
+				<extension>
+					<fieldList>
+						<field>
+							<fieldspec>
+								<fieldname>@3.urn:oid:1.0.15961.12.*</fieldname>
+							</fieldspec>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>tidBank</fieldname>
+							</fieldspec>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+						</field>
+						<field>
+							<fieldspec>
+								<fieldname>@3.urn:oid:1.0.15961.12.4</fieldname>
+							</fieldspec>
+							<includeFieldSpecInReport>true</includeFieldSpecInReport>
+						</field>
+					</fieldList>
+				</extension>
+			</output>
+		</reportSpec>
+	</reportSpecs>
+	<extension>
+		<primaryKeyFields>
+			<primaryKeyField>@3.urn:oid:1.0.15961.12.4</primaryKeyField>
+		</primaryKeyFields>
+	</extension>
+</ale:ECSpec>

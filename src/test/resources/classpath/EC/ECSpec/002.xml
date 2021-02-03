@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>001</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">2000</repeatPeriod>
+		<duration unit="MS">2000</duration>
+	</boundarySpec>
+	<reportSpecs>
+		<reportSpec reportName="default">
+			<reportSet set="CURRENT" />
+			<output includeEPC="true" />
+		</reportSpec>
+	</reportSpecs>
+</ale:ECSpec>

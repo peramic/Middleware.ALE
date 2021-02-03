@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:ECSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders />
+	<boundarySpec>
+		<stableSetInterval unit="">0</stableSetInterval>
+	</boundarySpec>
+	<reportSpecs />
+</ale:ECSpec>

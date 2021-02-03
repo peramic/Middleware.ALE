@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ale:CCSpec xmlns:ale="urn:epcglobal:ale:xsd:1"
+	schemaVersion="1.0" creationDate="0001-01-01T00:00:00">
+	<logicalReaders>
+		<logicalReader>020</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<duration unit="MS">2000</duration>
+		<repeatPeriod unit="MS">2000</repeatPeriod>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec name="name">
+			<opSpecs>
+				<opSpec>
+					<opType>READ</opType>
+					<fieldspec>
+						<fieldname>epcBank</fieldname>
+					</fieldspec>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ale:CCSpec>
