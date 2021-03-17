@@ -1,20 +1,3 @@
-/*****************************************************************************/
-/*    FILE  NAME               	: UIntPattern                                */
-/*    HOLDER OF RIGHTS OF USE	: HARTING KGaA                               */
-/*    DATE OF FIRST RELEASE 	: MAY 2011                                   */
-/*    AUTHOR                	: IT-AS RFID SW TEAM                         */
-/*    DESCRIPTION           	: This file contains the UIntPattern         */
-/*                            	  implementation                             */
-/*---------------------------------------------------------------------------*/
-/* CHANGE HISTORY :                                                          */
-/*---------------------------------------------------------------------------*/
-/* VERSION    DATE/                   DESCRIPTION OF CHANGE/                 */
-/*            MODIFIED BY             FAULT REPORT NO                        */
-/*---------------------------------------------------------------------------*/
-/* 1.0.0.0    May 2011                Initial Create.                        */
-/*            IT-AS RFID SW TEAM                                             */
-/*****************************************************************************/
-
 package havis.middleware.ale.core.report.pattern;
 
 import havis.middleware.ale.base.exception.ValidationException;
